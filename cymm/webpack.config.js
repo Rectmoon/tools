@@ -33,7 +33,19 @@ const config = {
     // publicPath: '/public/'
   },
   resolve: {
-    extensions: ['*', '.js', '.json', '.vue', '.styl']
+    extensions: ['*', '.js', '.json', '.vue', '.styl'],
+    modules: [path.join(__dirname, 'node_modules')],
+    alias: {
+      '@': resolve('src')
+    }
+  },
+  externals: {
+    // jquery: 'jQuery',
+    // lodash: {
+    //   commonjs: 'lodash',
+    //   amd: 'lodash',
+    //   root: '_'
+    // }
   },
   module: {
     rules: [
@@ -167,17 +179,17 @@ const config = {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV)
       }
     }),
-    // new DllReferencePlugin({
-    //   manifest: require('./dist/manifest/vendors.manifest.json')
-    // }),
-    // new DllReferencePlugin({
-    //   manifest: require('./dist/manifest/echarts.manifest.json')
-    // }),
+    new DllReferencePlugin({
+      manifest: require('./dist/manifest/vendors.manifest.json')
+    }),
+    new DllReferencePlugin({
+      manifest: require('./dist/manifest/echarts.manifest.json')
+    }),
     new MiniCssExtractPlugin({
       filename: isDev ? 'css/[name].css' : '[name].[hash:6].css',
       chunkFilename: isDev ? 'css/[id].css' : '[id].[hash:6].css'
     }),
-    // new WebpackDeepScopeAnalysisPlugin(),
+    new WebpackDeepScopeAnalysisPlugin(),
     new VueLoaderPlugin()
   ]
 }
