@@ -15,7 +15,7 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: utils.getEntries(),
   output: {
-    filename: isDev ? 'bundle.js' : '[name].[hash:6].js',
+    filename: '[name].js',
     path: resolve('dist'),
     publicPath: isDev ?
       config.dev.assetsPublicPath : config.build.assetsPublicPath
@@ -42,6 +42,13 @@ module.exports = {
         ]
       },
       {
+        test: /\.pug$/,
+        use: ['raw-loader', 'pug-html-loader']
+      }, {
+        test: /.html$/,
+        loader: 'raw-loader',
+        exclude: /static/
+      }, {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',
         options: {

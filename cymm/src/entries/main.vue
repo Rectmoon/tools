@@ -1,12 +1,11 @@
 <template>
   <div>
-    <h1>hello world12</h1>
-    <div class="box">hello pkq</div>
-    <p class="param">sssss</p>
+    <h1>hello</h1>
   </div>
 </template>
 
 <script>
+console.log(456)
 export default {}
 </script>
 

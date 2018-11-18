@@ -113,11 +113,11 @@ exports.htmlPlugins = function (webackConfig) {
   return Object.keys(webackConfig.entry).map(name => {
     const entryTpl = getFiles(ENTRIESDIR).filter(f => {
       let fileName = f.slice(0, f.lastIndexOf('.'))
-      return /\.html$/.test(f) && fileName == name
+      return /\.(pug|html)$/.test(f) && fileName == name
     })
     if (entryTpl.length)
       return htmlPlugin({
-        filename: `${entryTpl[0]}`,
+        filename: `${name}.html`,
         template: `${ENTRIESDIR}/${entryTpl[0]}`,
         chunks: [...extraChunks, name],
         title: `这是${name}页`
@@ -133,12 +133,12 @@ exports.htmlPlugins = function (webackConfig) {
 function htmlPlugin(extraConfig) {
   return new HtmlWebpackPlugin(
     Object.assign({
-        template: 'tpl.html',
+        template: './static/tpl.html',
         inject: true,
-        minify: {
-          // removeComments: true,
-          // collapseWhitespace: true,
-          // removeAttributeQuotes: false
+        minify: isDev ? {} : {
+          removeComments: true,
+          collapseWhitespace: true,
+          removeAttributeQuotes: true
         },
         title: '生平未见陈近南'
       }, {
