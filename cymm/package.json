@@ -11,6 +11,7 @@
   "keywords": [],
   "author": "Rectmoon",
   "license": "ISC",
+  "sideEffects": false,
   "dependencies": {
     "body-parser": "^1.18.3",
     "echarts": "^4.2.0-rc.2",

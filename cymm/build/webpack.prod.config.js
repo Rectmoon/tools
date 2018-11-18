@@ -14,7 +14,7 @@ const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
   .default
 /***
  *
- * 在项目中，注意要把babel设置module: false，避免babel将模块转为CommonJS规范。引入的模块包，也必须是符合ES6规范，并且在最新的webpack中加了一条限制，即在package.json中定义sideEffect: false，这也是为了避免出现import xxx导致模块内部的一些函数执行后影响全局环境，却被去除掉的情况。
+ * 在项目中，注意要把babel设置modules: false，避免babel将模块转为CommonJS规范。引入的模块包，也必须是符合ES6规范，并且在最新的webpack中加了一条限制，即在package.json中定义sideEffect: false，这也是为了避免出现import xxx导致模块内部的一些函数执行后影响全局环境，却被去除掉的情况。
  *
  * */
 
