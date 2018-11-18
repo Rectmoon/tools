@@ -1,12 +1,11 @@
 const path = require('path')
-const webpack = require('webpack')
 const config = require('../config')
 const utils = require('../build/utils')
-const vueLoaderConfig = require('./vueLoader.config')
+const vueLoaderConfig = require('./vue-loader.config')
 // 引入 DllReferencePlugin
-const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
-
+// const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
 const isDev = process.env.NODE_ENV === 'development'
+
 function resolve(dir) {
   return path.resolve(__dirname, '..', dir)
 }
@@ -18,9 +17,8 @@ module.exports = {
   output: {
     filename: isDev ? 'bundle.js' : '[name].[hash:6].js',
     path: resolve('dist'),
-    publicPath: isDev
-      ? config.dev.assetsPublicPath
-      : config.build.assetsPublicPath
+    publicPath: isDev ?
+      config.dev.assetsPublicPath : config.build.assetsPublicPath
   },
   resolve: {
     extensions: ['*', '.js', '.json', '.vue', '.styl'],
@@ -29,19 +27,18 @@ module.exports = {
       '@': resolve('src')
     }
   },
-  externals: {
-    vue: 'Vue'
-  },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.jsx?$/,
-        use: [
-          {
+        use: [{
             loader: 'babel-loader',
-            options: { cacheDirectory: isDev }
+            options: {
+              cacheDirectory: isDev
+            }
           },
-          { loader: 'eslint-loader' }
+          {
+            loader: 'eslint-loader'
+          }
         ]
       },
       {

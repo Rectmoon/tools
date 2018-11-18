@@ -7,17 +7,25 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const packageConfig = require('../package.json')
 const library = require('./library')
-const ENTRIESDIR = './src/entries'
+const ENTRIESDIR = path.resolve(__dirname, '..', 'src/entries')
 const isDev = process.env.NODE_ENV === 'development'
 
-exports.assetsPath = function(_path) {
-  const assetsSubDirectory = isDev
-    ? config.dev.assetsSubDirectory
-    : config.build.assetsSubDirectory
+function getFiles(dir) {
+  try {
+    return fs.readdirSync(dir)
+  } catch (e) {
+    return []
+  }
+}
+
+exports.assetsPath = function (_path) {
+  const assetsSubDirectory = isDev ?
+    config.dev.assetsSubDirectory :
+    config.build.assetsSubDirectory
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-exports.cssLoaders = function(options) {
+exports.cssLoaders = function (options) {
   options = options || {}
   const cssLoader = {
     loader: 'css-loader',
@@ -52,14 +60,16 @@ exports.cssLoaders = function(options) {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
-    sass: generateLoaders('sass', { indentedSyntax: true }),
+    sass: generateLoaders('sass', {
+      indentedSyntax: true
+    }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }
 }
 
-exports.styleLoaders = function(options) {
+exports.styleLoaders = function (options) {
   const output = []
   const loaders = exports.cssLoaders(options)
   for (const extension in loaders) {
@@ -89,29 +99,60 @@ exports.createNotifierCallback = () => {
   }
 }
 
-exports.getEntries = function() {
-  const entrieFiles = fs.readdirSync(ENTRIESDIR).filter(f => /\.js$/.test(f))
-  return entrieFiles.reduce((res, next) => {
+exports.getEntries = function () {
+  const entryJs = getFiles(ENTRIESDIR).filter(f => /\.js$/.test(f))
+  return entryJs.reduce((res, next) => {
     let name = next.slice(0, next.lastIndexOf('.'))
     res[name] = `${ENTRIESDIR}/${next}`
     return res
   }, {})
 }
 
-exports.htmlPlugins = function(webackConfig) {
+exports.htmlPlugins = function (webackConfig) {
   const extraChunks = isDev ? [] : ['manifest', 'vendor']
-  return Object.keys(webackConfig.entry).map(name =>
-    htmlPlugin({
+  return Object.keys(webackConfig.entry).map(name => {
+    const entryTpl = getFiles(ENTRIESDIR).filter(f => {
+      let fileName = f.slice(0, f.lastIndexOf('.'))
+      return /\.html$/.test(f) && fileName == name
+    })
+    if (entryTpl.length)
+      return htmlPlugin({
+        filename: `${entryTpl[0]}`,
+        template: `${ENTRIESDIR}/${entryTpl[0]}`,
+        chunks: [...extraChunks, name],
+        title: `这是${name}页`
+      })
+    return htmlPlugin({
       filename: `${name}.html`,
       chunks: [...extraChunks, name],
       title: `这是${name}页`
     })
+  })
+}
+
+function htmlPlugin(extraConfig) {
+  return new HtmlWebpackPlugin(
+    Object.assign({
+        template: 'tpl.html',
+        inject: true,
+        minify: {
+          // removeComments: true,
+          // collapseWhitespace: true,
+          // removeAttributeQuotes: false
+        },
+        title: '生平未见陈近南'
+      }, {
+        themeColor: '#f67a17',
+        themeFile: 'css/theme-colors.css'
+      },
+      extraConfig
+    )
   )
 }
 
-exports.includeAssets = function(webackConfig, extraCdn = []) {
+exports.includeAssets = function (extraCdn = []) {
   const cdnPaths = []
-  Object.keys(webackConfig.externals).forEach(name => {
+  Object.keys(config.build.externals).forEach(name => {
     if (library[name]) {
       cdnPaths.push(library[name])
     }
@@ -121,26 +162,4 @@ exports.includeAssets = function(webackConfig, extraCdn = []) {
     append: false,
     publicPath: ''
   })
-}
-
-function htmlPlugin(extraConfig) {
-  return new HtmlWebpackPlugin(
-    Object.assign(
-      {
-        template: 'tpl.html',
-        inject: true,
-        minify: {
-          // removeComments: true,
-          // collapseWhitespace: true,
-          // removeAttributeQuotes: false
-        },
-        title: '生平未见陈近南'
-      },
-      {
-        themeColor: '#f67a17',
-        themeFile: 'css/theme-colors.css'
-      },
-      extraConfig
-    )
-  )
 }

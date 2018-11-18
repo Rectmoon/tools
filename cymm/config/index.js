@@ -22,12 +22,16 @@ module.exports = {
   build: {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: './',
     assetsPublicPath: './',
     productionSourceMap: true,
     devtool: '#source-map',
     productionGzip: false,
     productionGzipExtensions: ['js', 'css'],
-    bundleAnalyzerReport: process.env.npm_config_report
+    bundleAnalyzerReport: process.env.npm_config_report,
+    externals: {
+      vue: 'Vue',
+      jquery: 'jQuery'
+    },
   }
 }

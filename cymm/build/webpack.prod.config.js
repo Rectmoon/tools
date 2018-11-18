@@ -7,7 +7,6 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // 引入 webpack-deep-scope-plugin 优化
@@ -46,29 +45,29 @@ const webpackConfig = merge(baseWebpackConfig, {
       chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
     }),
     new OptimizeCSSPlugin({
-      cssProcessorOptions: config.build.productionSourceMap
-        ? { safe: true, map: { inline: false } }
-        : { safe: true }
+      cssProcessorOptions: config.build.productionSourceMap ? {
+        safe: true,
+        map: {
+          inline: false
+        }
+      } : {
+        safe: true
+      }
     }),
     ...utils.htmlPlugins(baseWebpackConfig),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
 
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*']
-      }
-    ]),
+    new CopyWebpackPlugin([{
+      from: path.resolve(__dirname, '../static'),
+      to: config.build.assetsSubDirectory,
+      ignore: ['.*']
+    }]),
     new WebpackDeepScopeAnalysisPlugin(),
-    utils.includeAssets(baseWebpackConfig, [
-      {
-        path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-        type: 'css'
-      },
-      'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js'
-    ]),
+    utils.includeAssets([{
+      path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+      type: 'css'
+    }]),
     new VueLoaderPlugin()
   ],
   optimization: {
@@ -85,6 +84,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       maxInitialRequests: 3, // 最大初始化请求书
       name: true, // 名称，此选项可接收 function
       cacheGroups: {
+        // 这里开始设置缓存的 chunks
         vendor: {
           // key 为entry中定义的 入口名称
           name: 'vendor', // 要缓存的 分隔出来的 chunk 名称
@@ -93,16 +93,12 @@ const webpackConfig = merge(baseWebpackConfig, {
           reuseExistingChunk: false, // 选项用于配置在模块完全匹配时重用已有的块，而不是创建新块
           test: /node_modules[\\/]/
         },
-        aliOss: {
-          name: 'ali-oss',
-          priority: 10,
-          test: /ali\-oss/
+        common: {
+          name: 'common',
+          priority: 11,
+          test: /assets/,
+          minSize: 0
         }
-        // common: {
-        //     name: 'common',
-        //     priority: 11,
-        //     test: /assets/,
-        // },
       }
     }
   }
@@ -110,7 +106,6 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 if (config.build.productionGzip) {
   const CompressionWebpackPlugin = require('compression-webpack-plugin')
-
   webpackConfig.plugins.push(
     new CompressionWebpackPlugin({
       asset: '[path].gz[query]',

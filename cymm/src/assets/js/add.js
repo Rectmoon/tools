@@ -1,0 +1,1 @@
+export const add = (pre, next) => pre + next
