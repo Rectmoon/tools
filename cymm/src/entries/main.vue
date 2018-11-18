@@ -1,6 +1,6 @@
 <template>
   <div class='box'>
-  <h1>hello world12</h1>
+    <h1>hello world12</h1>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 export default {}
 </script>
 
-<style scoped lang='css'>
+<style scoped>
 .box {
   display: flex;
   transform: translateX(100px);
