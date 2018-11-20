@@ -14,7 +14,7 @@ const composer = require('gulp-uglify/composer')
 const minify = composer(uglifyjs, console)
 const pump = require('pump')
 const fileinclude = require('gulp-file-include')
-const DEFAULT_CONFIG = require('./qinchuan.config')
+const DEFAULT_CONFIG = require('./config')
 
 function logError(err) {
   gutil.log(gutil.colors.red('[Error]'), err.toString())
@@ -46,10 +46,10 @@ function doLint(paths, exit) {
     .src(paths)
     .pipe($.eslint())
     .pipe($.eslint.format())
-    .pipe(exit ? $.eslint.failAfterError() : $.eslint.result(result => {}))
+    .pipe(exit ? $.eslint.failAfterError() : $.eslint.result(() => {}))
 }
 
-gulp.task('clean', () => del(['dist/*']))
+gulp.task('clean', () => del(['dist']))
 gulp.task('lint', () => doLint(['gulpfile.js', 'src/**/*.js'], true))
 gulp.task('build', ['clean', 'lint'], () =>
   doBindle(browserify(DEFAULT_CONFIG.browserify))

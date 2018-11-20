@@ -22,7 +22,24 @@ module.exports = {
       ]
     ],
     transform: [
-      ['babelify', { babelrc: true, presets: ['@babel/preset-env'] }],
+      [
+        'babelify',
+        {
+          babelrc: true,
+          presets: [['@babel/preset-env']],
+          plugins: [
+            [
+              '@babel/plugin-transform-runtime',
+              {
+                corejs: false,
+                helpers: true,
+                regenerator: true,
+                useESModules: false
+              }
+            ]
+          ]
+        }
+      ],
       'browserify-versionify'
     ]
   },
