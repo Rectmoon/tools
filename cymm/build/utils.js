@@ -19,6 +19,10 @@ function getFiles(dir) {
   }
 }
 
+function getFileName(s) {
+  return s.slice(0, s.lastIndexOf('.'))
+}
+
 exports.assetsPath = function(_path) {
   const assetsSubDirectory = isDev
     ? config.dev.assetsSubDirectory
@@ -87,10 +91,8 @@ exports.createNotifierCallback = () => {
   const notifier = require('node-notifier')
   return (severity, errors) => {
     if (severity !== 'error') return
-
     const error = errors[0]
     const filename = error.file && error.file.split('!').pop()
-
     notifier.notify({
       title: packageConfig.name,
       message: severity + ': ' + error.name,
@@ -103,8 +105,7 @@ exports.createNotifierCallback = () => {
 exports.getEntries = function() {
   const entry = {}
   entryJs.forEach(js => {
-    let name = js.slice(0, js.lastIndexOf('.'))
-    entry[name] = `${ENTRIESDIR}/${js}`
+    entry[getFileName(js)] = `${ENTRIESDIR}/${js}`
   })
   return entry
 }
@@ -113,21 +114,20 @@ exports.htmlPlugins = function(webackConfig) {
   const extraChunks = Object.keys(webackConfig.entry).filter(
     k => !entryJs.includes(`${k}.js`)
   )
-  console.log(extraChunks)
   return entryJs.map(name => {
+    let n = getFileName(name)
     const entryTpl = getFiles(ENTRIESDIR).filter(f => {
-      let fileName = f.slice(0, f.lastIndexOf('.'))
-      return /\.(pug|html)$/.test(f) && fileName == name
+      return /\.(pug|html)$/.test(f) && getFileName(f) == n
     })
     if (entryTpl.length)
       return htmlPlugin({
-        filename: `${name}.html`,
+        filename: `${n}.html`,
         template: `${ENTRIESDIR}/${entryTpl[0]}`,
         chunks: [...extraChunks, name],
         title: `这是${name}页`
       })
     return htmlPlugin({
-      filename: `${name}.html`,
+      filename: `${n}.html`,
       chunks: [...extraChunks, name],
       title: `这是${name}页`
     })
