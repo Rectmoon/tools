@@ -11,11 +11,10 @@ function resolve(dir) {
 }
 
 module.exports = {
-  devtool: isDev ? 'eval-source-map' : '#source-map',
   context: path.resolve(__dirname, '../'),
   entry: {
-    ...utils.getEntries(),
-    vendor: ['vuex', 'lodash']
+    // vendor: [''],
+    ...utils.getEntries()
   },
   output: {
     filename: '[name].js',

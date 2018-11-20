@@ -30,8 +30,11 @@ module.exports = {
     productionGzipExtensions: ['js', 'css'],
     bundleAnalyzerReport: process.env.npm_config_report,
     externals: {
-      vue: 'Vue',
-      jquery: 'jQuery'
-    },
+      vue: 'window.Vue',
+      vuex: 'Vuex',
+      'vue-router': 'window.VueRouter',
+      jquery: 'jQuery',
+      'babel-polyfill': 'window'
+    }
   }
 }

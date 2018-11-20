@@ -111,9 +111,13 @@ exports.getEntries = function() {
 }
 
 exports.htmlPlugins = function(webackConfig) {
-  const extraChunks = Object.keys(webackConfig.entry).filter(
-    k => !entryJs.includes(`${k}.js`)
-  )
+  const extraChunks = isDev
+    ? []
+    : ['manifest'].concat(
+        Object.keys(webackConfig.entry).filter(
+          k => !entryJs.includes(`${k}.js`)
+        )
+      )
   return entryJs.map(name => {
     let n = getFileName(name)
     const entryTpl = getFiles(ENTRIESDIR).filter(f => {
@@ -123,13 +127,13 @@ exports.htmlPlugins = function(webackConfig) {
       return htmlPlugin({
         filename: `${n}.html`,
         template: `${ENTRIESDIR}/${entryTpl[0]}`,
-        chunks: [...extraChunks, name],
-        title: `这是${name}页`
+        chunks: [...extraChunks, n],
+        title: `这是${n}页`
       })
     return htmlPlugin({
       filename: `${n}.html`,
-      chunks: [...extraChunks, name],
-      title: `这是${name}页`
+      chunks: [...extraChunks, n],
+      title: `这是${n}页`
     })
   })
 }
@@ -159,6 +163,22 @@ function htmlPlugin(extraConfig) {
 }
 
 exports.includeAssets = function(extraCdn = []) {
+  // return entryJs.map(n => {
+  //   let cdnPaths = []
+  //   Object.keys(config.build.externals).forEach(lib => {
+  //     const str = fs.readFileSync(`${ENTRIESDIR}/${n}`, 'utf-8')
+  //     console.log(str.indexOf(lib))
+  //     if (library[lib] && str.indexOf(lib) > -1) {
+  //       cdnPaths.push(library[lib])
+  //     }
+  //   })
+  //   return new HtmlWebpackIncludeAssetsPlugin({
+  //     files: `${n}.html`,
+  //     assets: extraCdn.concat(cdnPaths),
+  //     append: true,
+  //     publicPath: ''
+  //   })
+  // })
   const cdnPaths = []
   Object.keys(config.build.externals).forEach(name => {
     if (library[name]) {

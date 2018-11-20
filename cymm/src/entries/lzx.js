@@ -1,25 +1,21 @@
-// require('./lzx.pug')
+require('babel-polyfill')
 import '../assets/styles/app.styl'
 import $ from 'jquery'
+import Vue from 'vue'
 import Vuex from 'vuex'
-
-new Vuex({
-  state: {
-    a: 789
-  }
-})
 import { add } from '../assets/js/add'
+import store from '../lzx/a'
 
 console.log(add(1, 10))
 
 const sleep = t => new Promise(resolve => setTimeout(resolve, t * 1000))
 
-async function fn() {
-  await sleep(4)
-  console.log(9)
-}
+// async function fn() {
+//   await sleep(4)
+//   console.log(9)
+// }
 
-fn()
+// fn()
 const o = {
   a: 1,
   b: {
@@ -37,6 +33,8 @@ console.log(2)
 
 const a = 123
 
-export default {
-  a: 1
-}
+export default new Vue({
+  store,
+  el: '#app',
+  render: h => h('h1', 'hello world')
+})
