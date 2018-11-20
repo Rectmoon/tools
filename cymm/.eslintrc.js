@@ -45,7 +45,6 @@ module.exports = {
     semi: 0,
     'semi-spacing': 2,
     'space-before-blocks': 2,
-    'space-before-function-paren': [2, { anonymous: 'always', named: 'never' }],
     'space-in-parens': [2, 'never'],
     'space-infix-ops': 2
   }
