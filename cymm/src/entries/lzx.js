@@ -1,11 +1,25 @@
 // require('./lzx.pug')
 import '../assets/styles/app.styl'
 import $ from 'jquery'
-import {
-  add
-} from '../assets/js/add'
+import Vuex from 'vuex'
 
-console.log(add(1, 10));
+new Vuex({
+  state: {
+    a: 789
+  }
+})
+import { add } from '../assets/js/add'
+
+console.log(add(1, 10))
+
+const sleep = t => new Promise(resolve => setTimeout(resolve, t * 1000))
+
+async function fn() {
+  await sleep(4)
+  console.log(9)
+}
+
+fn()
 const o = {
   a: 1,
   b: {

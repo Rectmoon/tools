@@ -13,12 +13,16 @@ function resolve(dir) {
 module.exports = {
   devtool: isDev ? 'eval-source-map' : '#source-map',
   context: path.resolve(__dirname, '../'),
-  entry: utils.getEntries(),
+  entry: {
+    ...utils.getEntries(),
+    vendor: ['vuex', 'lodash']
+  },
   output: {
     filename: '[name].js',
     path: resolve('dist'),
-    publicPath: isDev ?
-      config.dev.assetsPublicPath : config.build.assetsPublicPath
+    publicPath: isDev
+      ? config.dev.assetsPublicPath
+      : config.build.assetsPublicPath
   },
   resolve: {
     extensions: ['*', '.js', '.json', '.vue', '.styl'],
@@ -28,9 +32,11 @@ module.exports = {
     }
   },
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.jsx?$/,
-        use: [{
+        use: [
+          {
             loader: 'babel-loader',
             options: {
               cacheDirectory: isDev
@@ -44,11 +50,13 @@ module.exports = {
       {
         test: /\.pug$/,
         use: ['raw-loader', 'pug-html-loader']
-      }, {
+      },
+      {
         test: /.html$/,
         loader: 'raw-loader',
         exclude: /static/
-      }, {
+      },
+      {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         loader: 'url-loader',
         options: {

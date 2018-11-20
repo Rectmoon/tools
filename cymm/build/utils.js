@@ -9,6 +9,7 @@ const packageConfig = require('../package.json')
 const library = require('./library')
 const ENTRIESDIR = path.resolve(__dirname, '..', 'src/entries')
 const isDev = process.env.NODE_ENV === 'development'
+const entryJs = getFiles(ENTRIESDIR).filter(f => /\.js$/.test(f))
 
 function getFiles(dir) {
   try {
@@ -18,14 +19,14 @@ function getFiles(dir) {
   }
 }
 
-exports.assetsPath = function (_path) {
-  const assetsSubDirectory = isDev ?
-    config.dev.assetsSubDirectory :
-    config.build.assetsSubDirectory
+exports.assetsPath = function(_path) {
+  const assetsSubDirectory = isDev
+    ? config.dev.assetsSubDirectory
+    : config.build.assetsSubDirectory
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-exports.cssLoaders = function (options) {
+exports.cssLoaders = function(options) {
   options = options || {}
   const cssLoader = {
     loader: 'css-loader',
@@ -69,7 +70,7 @@ exports.cssLoaders = function (options) {
   }
 }
 
-exports.styleLoaders = function (options) {
+exports.styleLoaders = function(options) {
   const output = []
   const loaders = exports.cssLoaders(options)
   for (const extension in loaders) {
@@ -99,18 +100,21 @@ exports.createNotifierCallback = () => {
   }
 }
 
-exports.getEntries = function () {
-  const entryJs = getFiles(ENTRIESDIR).filter(f => /\.js$/.test(f))
-  return entryJs.reduce((res, next) => {
-    let name = next.slice(0, next.lastIndexOf('.'))
-    res[name] = `${ENTRIESDIR}/${next}`
-    return res
-  }, {})
+exports.getEntries = function() {
+  const entry = {}
+  entryJs.forEach(js => {
+    let name = js.slice(0, js.lastIndexOf('.'))
+    entry[name] = `${ENTRIESDIR}/${js}`
+  })
+  return entry
 }
 
-exports.htmlPlugins = function (webackConfig) {
-  const extraChunks = isDev ? [] : ['manifest', 'vendor']
-  return Object.keys(webackConfig.entry).map(name => {
+exports.htmlPlugins = function(webackConfig) {
+  const extraChunks = Object.keys(webackConfig.entry).filter(
+    k => !entryJs.includes(`${k}.js`)
+  )
+  console.log(extraChunks)
+  return entryJs.map(name => {
     const entryTpl = getFiles(ENTRIESDIR).filter(f => {
       let fileName = f.slice(0, f.lastIndexOf('.'))
       return /\.(pug|html)$/.test(f) && fileName == name
@@ -132,16 +136,20 @@ exports.htmlPlugins = function (webackConfig) {
 
 function htmlPlugin(extraConfig) {
   return new HtmlWebpackPlugin(
-    Object.assign({
+    Object.assign(
+      {
         template: './static/tpl.html',
         inject: true,
-        minify: isDev ? {} : {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: true
-        },
+        minify: isDev
+          ? {}
+          : {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeAttributeQuotes: true
+            },
         title: '生平未见陈近南'
-      }, {
+      },
+      {
         themeColor: '#f67a17',
         themeFile: 'css/theme-colors.css'
       },
@@ -150,7 +158,7 @@ function htmlPlugin(extraConfig) {
   )
 }
 
-exports.includeAssets = function (extraCdn = []) {
+exports.includeAssets = function(extraCdn = []) {
   const cdnPaths = []
   Object.keys(config.build.externals).forEach(name => {
     if (library[name]) {
