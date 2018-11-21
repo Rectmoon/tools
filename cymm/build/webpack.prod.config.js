@@ -78,7 +78,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       }
     ]),
     new WebpackDeepScopeAnalysisPlugin(),
-    utils.includeAssets([
+    ...utils.includeAssets([
       {
         path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
         type: 'css'

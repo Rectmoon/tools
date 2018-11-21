@@ -163,31 +163,19 @@ function htmlPlugin(extraConfig) {
 }
 
 exports.includeAssets = function(extraCdn = []) {
-  // return entryJs.map(n => {
-  //   let cdnPaths = []
-  //   Object.keys(config.build.externals).forEach(lib => {
-  //     const str = fs.readFileSync(`${ENTRIESDIR}/${n}`, 'utf-8')
-  //     console.log(str.indexOf(lib))
-  //     if (library[lib] && str.indexOf(lib) > -1) {
-  //       cdnPaths.push(library[lib])
-  //     }
-  //   })
-  //   return new HtmlWebpackIncludeAssetsPlugin({
-  //     files: `${n}.html`,
-  //     assets: extraCdn.concat(cdnPaths),
-  //     append: true,
-  //     publicPath: ''
-  //   })
-  // })
-  const cdnPaths = []
-  Object.keys(config.build.externals).forEach(name => {
-    if (library[name]) {
-      cdnPaths.push(library[name])
-    }
-  })
-  return new HtmlWebpackIncludeAssetsPlugin({
-    assets: extraCdn.concat(cdnPaths),
-    append: false,
-    publicPath: ''
+  return entryJs.map(n => {
+    let cdnPaths = []
+    const str = fs.readFileSync(`${ENTRIESDIR}/${n}`, 'utf-8')
+    Object.keys(config.build.externals).forEach(lib => {
+      if (library[lib] && str.indexOf(lib) > -1) {
+        cdnPaths.push(library[lib])
+      }
+    })
+    return new HtmlWebpackIncludeAssetsPlugin({
+      files: `${getFileName(n)}.html`,
+      assets: extraCdn.concat(cdnPaths),
+      append: false,
+      publicPath: ''
+    })
   })
 }

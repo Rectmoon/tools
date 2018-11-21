@@ -10,12 +10,12 @@ console.log(add(1, 10))
 
 const sleep = t => new Promise(resolve => setTimeout(resolve, t * 1000))
 
-// async function fn() {
-//   await sleep(4)
-//   console.log(9)
-// }
+async function fn() {
+  await sleep(4)
+  console.log(9)
+}
 
-// fn()
+fn()
 const o = {
   a: 1,
   b: {
