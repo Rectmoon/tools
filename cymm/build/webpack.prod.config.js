@@ -1,4 +1,3 @@
-'use strict'
 const path = require('path')
 const utils = require('./utils')
 const webpack = require('webpack')
@@ -8,7 +7,6 @@ const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // 引入 webpack-deep-scope-plugin 优化
 const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
   .default
@@ -27,9 +25,7 @@ const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
 
  * 
  * */
-
 const env = require('../config/prod.env')
-
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   module: {
@@ -50,7 +46,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-
+    new MiniCssExtractPlugin({
+      filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
+      chunkFilename: utils.assetsPath('css/[id].css')
+    }),
     new OptimizeCSSPlugin({
       cssProcessorOptions: config.build.productionSourceMap
         ? {
@@ -66,7 +65,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     ...utils.htmlPlugins(baseWebpackConfig),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
-
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
@@ -74,18 +72,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*', '*.html']
       }
     ]),
-    new WebpackDeepScopeAnalysisPlugin(),
-    ...utils.includeAssets([
-      {
-        path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-        type: 'css'
-      }
-    ]),
-    new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
-      chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
-    })
+    new WebpackDeepScopeAnalysisPlugin()
+    // ...utils.includeAssets([
+    //   {
+    //     path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+    //     type: 'css'
+    //   }
+    // ]),
   ],
   optimization: {
     runtimeChunk: {
@@ -96,7 +89,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     splitChunks: {
       chunks: 'async', // 必须三选一： "initial" | "all" | "async"
       minSize: 30000, // 最小尺寸
-      minChunks: 1, //must be greater than or equal 2. The minimum number of chunks which need to contain a module before it's moved into the commons chunk.
+      minChunks: 2, //must be greater than or equal 2. The minimum number of chunks which need to contain a module before it's moved into the commons chunk.
       maxAsyncRequests: 5, // 最大异步请求数
       maxInitialRequests: 3, // 最大初始化请求书
       name: true, // 名称，此选项可接收 function
@@ -110,13 +103,13 @@ const webpackConfig = merge(baseWebpackConfig, {
           reuseExistingChunk: false, // 选项用于配置在模块完全匹配时重用已有的块，而不是创建新块
           // test: /node_modules\/(.*)/,
           test: /(react|react-dom)/
+        },
+        common: {
+          name: 'common',
+          priority: 11,
+          test: /assets/,
+          minSize: 0
         }
-        // common: {
-        //   name: 'common',
-        //   priority: 11,
-        //   test: /assets/,
-        //   minSize: 0
-        // }
       }
     }
   }
