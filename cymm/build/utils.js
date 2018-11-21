@@ -174,8 +174,8 @@ exports.includeAssets = function(extraCdn = []) {
     return new HtmlWebpackIncludeAssetsPlugin({
       files: `${getFileName(n)}.html`,
       assets: extraCdn.concat(cdnPaths),
-      append: false,
-      publicPath: ''
+      append: false
+      // publicPath: ''
     })
   })
 }

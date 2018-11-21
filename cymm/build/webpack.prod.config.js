@@ -50,10 +50,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new MiniCssExtractPlugin({
-      filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
-      chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
-    }),
+
     new OptimizeCSSPlugin({
       cssProcessorOptions: config.build.productionSourceMap
         ? {
@@ -84,7 +81,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         type: 'css'
       }
     ]),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({
+      filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
+      chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
+    })
   ],
   optimization: {
     runtimeChunk: {
@@ -109,13 +110,13 @@ const webpackConfig = merge(baseWebpackConfig, {
           reuseExistingChunk: false, // 选项用于配置在模块完全匹配时重用已有的块，而不是创建新块
           // test: /node_modules\/(.*)/,
           test: /(react|react-dom)/
-        },
-        common: {
-          name: 'common',
-          priority: 11,
-          test: /assets/,
-          minSize: 0
         }
+        // common: {
+        //   name: 'common',
+        //   priority: 11,
+        //   test: /assets/,
+        //   minSize: 0
+        // }
       }
     }
   }
