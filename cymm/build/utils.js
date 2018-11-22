@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const packageConfig = require('../package.json')
 const library = require('./library')
-const ENTRIESDIR = path.resolve(__dirname, '..', 'src/entries')
+const ENTRIESDIR = './src/entries'
 const isDev = process.env.NODE_ENV === 'development'
 const entryJs = getFiles(ENTRIESDIR).filter(f => /\.js$/.test(f))
 

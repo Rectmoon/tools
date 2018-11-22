@@ -5,7 +5,7 @@ const path = require('path')
 module.exports = {
   dev: {
     assetsSubDirectory: '',
-    assetsPublicPath: '/public',
+    assetsPublicPath: '/',
     proxyTable: {},
     host: 'localhost',
     port: 9000,
