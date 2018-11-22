@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const DllPlugin = require('webpack/lib/DllPlugin')
 
 module.exports = {

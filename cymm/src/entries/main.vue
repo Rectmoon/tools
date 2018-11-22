@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='box'>
     <h1>hello</h1>
   </div>
 </template>
@@ -17,6 +17,6 @@ export default {}
 .param {
   font-weight: 800;
   font-size: 16px;
-  color: orange;
+  color: #ffa500;
 }
 </style>

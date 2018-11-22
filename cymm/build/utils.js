@@ -1,4 +1,3 @@
-'use strict'
 const fs = require('fs')
 const path = require('path')
 const config = require('../config')
@@ -7,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const packageConfig = require('../package.json')
 const library = require('./library')
-const ENTRIESDIR = path.resolve(__dirname, '..', 'src/entries')
+const ENTRIESDIR = './src/entries'
 const isDev = process.env.NODE_ENV === 'development'
 const entryJs = getFiles(ENTRIESDIR).filter(f => /\.js$/.test(f))
 
@@ -47,8 +46,10 @@ exports.cssLoaders = function(options) {
   }
 
   function generateLoaders(loader, loaderOptions) {
-    const loaders = ['vue-style-loader', cssLoader]
-    options.usePostCSS && loaders.push(postcssLoader)
+    const loaders = options.usePostCSS
+      ? [cssLoader, postcssLoader]
+      : [cssLoader]
+
     if (loader) {
       loaders.push({
         loader: loader + '-loader',
@@ -57,8 +58,31 @@ exports.cssLoaders = function(options) {
         })
       })
     }
-    if (options.extract) loaders.splice(1, 0, MiniCssExtractPlugin.loader)
-    return loaders
+
+    // Extract CSS when that option is specified
+    // (which is the case during production build)
+    if (options.extract) {
+      return ['vue-style-loader', MiniCssExtractPlugin.loader].concat(loaders)
+    } else {
+      return ['vue-style-loader'].concat(loaders)
+    }
+    // const l = isDev
+    //   ? 'vue-style-loader'
+    //   : options.extract
+    //   ? MiniCssExtractPlugin.loader
+    //   : ''
+    // const loaders = options.usePostCSS
+    //   ? [l, cssLoader, postcssLoader]
+    //   : [l, cssLoader]
+    // if (loader) {
+    //   loaders.push({
+    //     loader: loader + '-loader',
+    //     options: Object.assign({}, loaderOptions, {
+    //       sourceMap: options.sourceMap
+    //     })
+    //   })
+    // }
+    // return loaders
   }
 
   return {
@@ -98,7 +122,7 @@ exports.createNotifierCallback = () => {
       title: packageConfig.name,
       message: severity + ': ' + error.name,
       subtitle: filename || '',
-      icon: path.join(__dirname, 'logo.png')
+      icon: path.join(__dirname, '')
     })
   }
 }

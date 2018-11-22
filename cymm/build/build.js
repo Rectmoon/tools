@@ -1,4 +1,3 @@
-'use strict'
 const ora = require('ora')
 const rm = require('rimraf')
 const path = require('path')

@@ -2,6 +2,7 @@ const path = require('path')
 const config = require('../config')
 const utils = require('../build/utils')
 const vueLoaderConfig = require('./vue-loader.config')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 // 引入 DllReferencePlugin
 // const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
 const isDev = process.env.NODE_ENV === 'development'
@@ -11,11 +12,11 @@ function resolve(dir) {
 }
 
 module.exports = {
-  context: path.resolve(__dirname, '../'),
-  entry: {
-    // vendor: [''],
-    ...utils.getEntries()
-  },
+  entry: utils.getEntries(),
+  // {
+  //   // vendor: [''],
+  //   ...utils.getEntries()
+  // },
   output: {
     filename: '[name].js',
     path: resolve('dist'),
@@ -97,13 +98,14 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
-  // plugins: [
-  //   new DllReferencePlugin({
-  //     manifest: require('./dist/manifest/vendors.manifest.json')
-  //   }),
-  //   new DllReferencePlugin({
-  //     manifest: require('./dist/manifest/echarts.manifest.json')
-  //   }),
-  // ]
+  },
+  plugins: [
+    // new DllReferencePlugin({
+    //   manifest: require('./dist/manifest/vendors.manifest.json')
+    // }),
+    // new DllReferencePlugin({
+    //   manifest: require('./dist/manifest/echarts.manifest.json')
+    // }),
+    new VueLoaderPlugin()
+  ]
 }

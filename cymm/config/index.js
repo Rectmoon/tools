@@ -4,8 +4,8 @@ const path = require('path')
 
 module.exports = {
   dev: {
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/public',
+    assetsSubDirectory: '',
+    assetsPublicPath: '/',
     proxyTable: {},
     host: 'localhost',
     port: 9000,
@@ -20,10 +20,9 @@ module.exports = {
     cssSourceMap: true
   },
   build: {
-    index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: './',
-    assetsPublicPath: './',
+    assetsSubDirectory: '',
+    assetsPublicPath: '',
     productionSourceMap: true,
     devtool: '#source-map',
     productionGzip: false,

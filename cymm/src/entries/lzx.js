@@ -1,8 +1,7 @@
 require('babel-polyfill')
-import '../assets/styles/app.styl'
+import '@/assets/styles/app.styl'
 import $ from 'jquery'
 import Vue from 'vue'
-import Vuex from 'vuex'
 import { add } from '../assets/js/add'
 import store from '../lzx/a'
 
