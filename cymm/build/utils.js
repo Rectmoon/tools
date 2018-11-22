@@ -46,9 +46,8 @@ exports.cssLoaders = function(options) {
   }
 
   function generateLoaders(loader, loaderOptions) {
-    const loaders = options.usePostCSS
-      ? [cssLoader, postcssLoader]
-      : [cssLoader]
+    const loaders = ['vue-style-loader', cssLoader]
+    if (options.usePostCSS) loaders.push(postcssLoader)
     if (loader) {
       loaders.push({
         loader: loader + '-loader',
@@ -57,18 +56,18 @@ exports.cssLoaders = function(options) {
         })
       })
     }
-    if (options.extract)
-      return ['vue-style-loader', MiniCssExtractPlugin.loader].concat(loaders)
-    return ['vue-style-loader'].concat(loaders)
+    if (options.extract) {
+      // loaders.splice(0, 1, MiniCssExtractPlugin.loader)
+      loaders.splice(1, 0, MiniCssExtractPlugin.loader)
+    }
+    return loaders
   }
 
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
-    sass: generateLoaders('sass', {
-      indentedSyntax: true
-    }),
+    sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
@@ -121,7 +120,7 @@ exports.htmlPlugins = function(webackConfig) {
       )
   return entryJs.map(name => {
     let n = getFileName(name)
-    const entryTpl = getFiles(ENTRIESDIR).filter(f => {
+    let entryTpl = getFiles(ENTRIESDIR).filter(f => {
       return /\.(pug|html)$/.test(f) && getFileName(f) == n
     })
     if (entryTpl.length)

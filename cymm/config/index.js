@@ -1,5 +1,3 @@
-'use strict'
-
 const path = require('path')
 
 module.exports = {
@@ -29,7 +27,7 @@ module.exports = {
     productionGzipExtensions: ['js', 'css'],
     bundleAnalyzerReport: process.env.npm_config_report,
     externals: {
-      vue: 'window.Vue',
+      vue: 'Vue',
       vuex: 'Vuex',
       'vue-router': 'window.VueRouter',
       jquery: 'jQuery',

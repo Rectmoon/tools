@@ -1,8 +1,8 @@
 const path = require('path')
 const config = require('../config')
 const utils = require('../build/utils')
-const vueLoaderConfig = require('./vue-loader.config')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const vueLoaderConfig = require('./vue-loader.config')
 // 引入 DllReferencePlugin
 // const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
 const isDev = process.env.NODE_ENV === 'development'
@@ -48,11 +48,16 @@ module.exports = {
         ]
       },
       {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: vueLoaderConfig
+      },
+      {
         test: /\.pug$/,
         use: ['raw-loader', 'pug-html-loader']
       },
       {
-        test: /.html$/,
+        test: /\.html$/,
         loader: 'raw-loader',
         exclude: /static/
       },
@@ -83,11 +88,6 @@ module.exports = {
             name: 'fonts/[name].[hash:6].[ext]'
           }
         }
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: vueLoaderConfig
       }
     ]
   },

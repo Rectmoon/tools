@@ -39,7 +39,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     filename: utils.assetsPath('js/[name].[chunkhash:6].js'),
     chunkFilename: utils.assetsPath('js/[id].[chunkhash:6].js')
   },
-  externals: config.build.externals,
+  externals: { ...config.build.externals },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': env
