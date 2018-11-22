@@ -1,13 +1,14 @@
 <template>
-  <div class='box'>
+  <div class="box">
     <h1>hello</h1>
   </div>
 </template>
 
 <script>
-console.log(456)
-export default {}
-</script>
+export default {
+  created() {}
+}
+</script> 
 
 <style scoped>
 .box {

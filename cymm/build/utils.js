@@ -49,7 +49,6 @@ exports.cssLoaders = function(options) {
     const loaders = options.usePostCSS
       ? [cssLoader, postcssLoader]
       : [cssLoader]
-
     if (loader) {
       loaders.push({
         loader: loader + '-loader',
@@ -58,31 +57,9 @@ exports.cssLoaders = function(options) {
         })
       })
     }
-
-    // Extract CSS when that option is specified
-    // (which is the case during production build)
-    if (options.extract) {
+    if (options.extract)
       return ['vue-style-loader', MiniCssExtractPlugin.loader].concat(loaders)
-    } else {
-      return ['vue-style-loader'].concat(loaders)
-    }
-    // const l = isDev
-    //   ? 'vue-style-loader'
-    //   : options.extract
-    //   ? MiniCssExtractPlugin.loader
-    //   : ''
-    // const loaders = options.usePostCSS
-    //   ? [l, cssLoader, postcssLoader]
-    //   : [l, cssLoader]
-    // if (loader) {
-    //   loaders.push({
-    //     loader: loader + '-loader',
-    //     options: Object.assign({}, loaderOptions, {
-    //       sourceMap: options.sourceMap
-    //     })
-    //   })
-    // }
-    // return loaders
+    return ['vue-style-loader'].concat(loaders)
   }
 
   return {
@@ -108,7 +85,6 @@ exports.styleLoaders = function(options) {
       use: loader
     })
   }
-  // console.log(output[5])
   return output
 }
 

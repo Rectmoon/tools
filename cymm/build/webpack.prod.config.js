@@ -19,10 +19,8 @@ const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
   2. dll: 将每个页面都会引用的且基本不会改变的依赖包，如 react/react-dom 等再抽离出来，不让其他模块的变化污染 dll 库的 hash 缓存。
   3. manifest: webpack 运行时(runtime)代码。每当依赖包变化，webpack 的运行时代码也会发生变化，如若不将这部分抽离开来，增加了 common 包 hash 值变化的可能性。
   4 .页面入口文件对应的page.js
-  
   可以使用 externals 配合 cdn 加速
   也可以使用 dll预先打包
-
  * 
  * */
 const env = require('../config/prod.env')
@@ -48,19 +46,12 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
-      chunkFilename: utils.assetsPath('css/[id].css')
+      chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
     }),
     new OptimizeCSSPlugin({
       cssProcessorOptions: config.build.productionSourceMap
-        ? {
-            safe: true,
-            map: {
-              inline: false
-            }
-          }
-        : {
-            safe: true
-          }
+        ? { safe: true, map: { inline: false } }
+        : { safe: true }
     }),
     ...utils.htmlPlugins(baseWebpackConfig),
     new webpack.HashedModuleIdsPlugin(),
@@ -72,13 +63,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*', '*.html']
       }
     ]),
-    new WebpackDeepScopeAnalysisPlugin()
-    // ...utils.includeAssets([
-    //   {
-    //     path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-    //     type: 'css'
-    //   }
-    // ]),
+    new WebpackDeepScopeAnalysisPlugin(),
+    ...utils.includeAssets([
+      {
+        path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+        type: 'css'
+      }
+    ])
   ],
   optimization: {
     runtimeChunk: {
@@ -103,13 +94,13 @@ const webpackConfig = merge(baseWebpackConfig, {
           reuseExistingChunk: false, // 选项用于配置在模块完全匹配时重用已有的块，而不是创建新块
           // test: /node_modules\/(.*)/,
           test: /(react|react-dom)/
-        },
-        common: {
-          name: 'common',
-          priority: 11,
-          test: /assets/,
-          minSize: 0
         }
+        // common: {
+        //   name: 'common',
+        //   priority: 10,
+        //   test: /assets/,
+        //   minSize: 0
+        // }
       }
     }
   }
