@@ -27,19 +27,21 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   module: {
-    rules: [...utils.styleLoaders({
+    rules: utils.styleLoaders({
       sourceMap: config.dev.cssSourceMap,
       usePostCSS: true
-    })]
+    })
   },
   devtool: config.dev.devtool,
   devServer: {
     clientLogLevel: 'warning',
     historyApiFallback: {
-      rewrites: [{
-        from: /.*/,
-        to: path.posix.join(config.dev.assetsPublicPath, 'index.html')
-      }]
+      rewrites: [
+        {
+          from: /.*/,
+          to: path.posix.join(config.dev.assetsPublicPath, 'index.html')
+        }
+      ]
     },
     hot: true,
     contentBase: false,
@@ -47,10 +49,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay ? {
-      warnings: false,
-      errors: true
-    } : false,
+    overlay: config.dev.errorOverlay
+      ? {
+          warnings: false,
+          errors: true
+        }
+      : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
@@ -92,11 +96,13 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     ...utils.htmlPlugins(baseWebpackConfig),
     new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, '../static'),
-      to: config.dev.assetsSubDirectory,
-      ignore: ['.*']
-    }]),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../static'),
+        to: config.dev.assetsSubDirectory,
+        ignore: ['.*']
+      }
+    ]),
     new VueLoaderPlugin()
   ]
 })
@@ -118,8 +124,9 @@ module.exports = new Promise((resolve, reject) => {
               }:${port}`
             ]
           },
-          onErrors: config.dev.notifyOnErrors ?
-            utils.createNotifierCallback() : undefined
+          onErrors: config.dev.notifyOnErrors
+            ? utils.createNotifierCallback()
+            : undefined
         })
       )
       resolve(devWebpackConfig)
