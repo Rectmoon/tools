@@ -5,7 +5,7 @@ const config = require('../config')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 // 引入 webpack-deep-scope-plugin 优化
 const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
@@ -48,22 +48,22 @@ const webpackConfig = merge(baseWebpackConfig, {
     //   filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
     //   chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
     // }),
-    new OptimizeCSSPlugin({
-      cssProcessorOptions: config.build.productionSourceMap
-        ? { safe: true, map: { inline: false } }
-        : { safe: true }
-    }),
-    ...utils.htmlPlugins(baseWebpackConfig),
-    new webpack.HashedModuleIdsPlugin(),
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
-        ignore: ['.*', '*.html']
-      }
-    ]),
-    new WebpackDeepScopeAnalysisPlugin()
+    // new OptimizeCSSPlugin({
+    //   cssProcessorOptions: config.build.productionSourceMap
+    //     ? { safe: true, map: { inline: false } }
+    //     : { safe: true }
+    // }),
+    ...utils.htmlPlugins(baseWebpackConfig)
+    // new webpack.HashedModuleIdsPlugin(),
+    // new webpack.optimize.ModuleConcatenationPlugin(),
+    // new CopyWebpackPlugin([
+    //   {
+    //     from: path.resolve(__dirname, '../static'),
+    //     to: config.build.assetsSubDirectory,
+    //     ignore: ['.*', '*.html']
+    //   }
+    // ])
+    // new WebpackDeepScopeAnalysisPlugin()
     // ...utils.includeAssets([
     //   {
     //     path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
