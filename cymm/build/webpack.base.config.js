@@ -1,6 +1,6 @@
 const path = require('path')
 const config = require('../config')
-const utils = require('../build/utils')
+// const utils = require('../build/utils')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // 引入 DllReferencePlugin
@@ -11,11 +11,9 @@ function resolve(dir) {
 }
 
 module.exports = {
-  entry: utils.getEntries(),
-  // {
-  //   // vendor: [''],
-  //   ...utils.getEntries()
-  // },
+  mode: 'production',
+  entry: './src/entries/app.js',
+  // entry: utils.getEntries(),
   output: {
     filename: '[name].js',
     path: resolve('dist'),
@@ -46,56 +44,46 @@ module.exports = {
           }
         ]
       },
-      {
-        test: /\.vue$/,
-        loader: 'vue-loader'
-      },
-      {
-        test: /\.pug$/,
-        use: ['raw-loader', 'pug-html-loader']
-      },
-      {
-        test: /\.html$/,
-        loader: 'raw-loader',
-        exclude: /static/
-      },
-      {
-        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 40000,
-          name: 'media/[name].[hash:6].[ext]'
-        }
-      },
-      {
-        test: /\.(gif|jpe?g|png|woff|svg|eot|ttf)\??.*$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            name: 'images/[name].[hash:6].[ext]',
-            limit: 4096
-          }
-        }
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf|htc)$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            limit: 4096,
-            name: 'fonts/[name].[hash:6].[ext]'
-          }
-        }
-      },
+      // {
+      //   test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+      //   loader: 'url-loader',
+      //   options: {
+      //     limit: 40000,
+      //     name: 'media/[name].[hash:6].[ext]'
+      //   }
+      // },
+      // {
+      //   test: /\.(gif|jpe?g|png|woff|svg|eot|ttf)\??.*$/,
+      //   use: {
+      //     loader: 'url-loader',
+      //     options: {
+      //       name: 'images/[name].[hash:6].[ext]',
+      //       limit: 4096
+      //     }
+      //   }
+      // },
+      // {
+      //   test: /\.(woff|woff2|eot|ttf|otf|htc)$/,
+      //   use: {
+      //     loader: 'file-loader',
+      //     options: {
+      //       limit: 4096,
+      //       name: 'fonts/[name].[hash:6].[ext]'
+      //     }
+      //   }
+      // },
       {
         test: /\.styl(us)?$/,
         use: [
-          // isDev ?  'vue-style-loader' : MiniCssExtractPlugin.loader,
           MiniCssExtractPlugin.loader,
           'css-loader',
           // 'postcss-loader',
           'stylus-loader'
         ]
+      },
+      {
+        test: /\.scss$/,
+        use: ['vue-style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.css$/,
@@ -104,7 +92,20 @@ module.exports = {
           'css-loader',
           'postcss-loader'
         ]
+      },
+      {
+        test: /\.vue$/,
+        use: 'vue-loader'
       }
+      // {
+      //   test: /\.pug$/,
+      //   use: ['raw-loader', 'pug-html-loader']
+      // },
+      // {
+      //   test: /\.html$/,
+      //   loader: 'raw-loader',
+      //   exclude: /static/
+      // }
     ]
   },
   node: {
@@ -123,13 +124,10 @@ module.exports = {
     //   manifest: require('./dist/manifest/echarts.manifest.json')
     // }),
     new VueLoaderPlugin(),
-    new MiniCssExtractPlugin({
-      filename: isDev
-        ? 'css/[name].css'
-        : utils.assetsPath('css/[name].[chunkhash:6].css'),
-      chunkFilename: isDev
-        ? 'css/[id].css'
-        : utils.assetsPath('css/[id].[chunkhash:6].css')
-    })
+    new MiniCssExtractPlugin({ filename: '[name].[hash:6].css' })
+    // new MiniCssExtractPlugin({
+    //   filename: utils.assetsPath('css/[name].css'),
+    //   chunkFilename: utils.assetsPath('css/[id].css')
+    // })
   ]
 }
