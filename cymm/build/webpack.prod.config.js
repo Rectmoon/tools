@@ -26,13 +26,13 @@ const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
 const env = require('../config/prod.env')
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
-  module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
-      extract: true,
-      usePostCSS: true
-    })
-  },
+  // module: {
+  //   rules: utils.styleLoaders({
+  //     sourceMap: config.build.productionSourceMap,
+  //     extract: true,
+  //     usePostCSS: true
+  //   })
+  // },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
@@ -44,10 +44,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new MiniCssExtractPlugin({
-      filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
-      chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
-    }),
+    // new MiniCssExtractPlugin({
+    //   filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
+    //   chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
+    // }),
     new OptimizeCSSPlugin({
       cssProcessorOptions: config.build.productionSourceMap
         ? { safe: true, map: { inline: false } }
@@ -63,13 +63,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*', '*.html']
       }
     ]),
-    new WebpackDeepScopeAnalysisPlugin(),
-    ...utils.includeAssets([
-      {
-        path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-        type: 'css'
-      }
-    ])
+    new WebpackDeepScopeAnalysisPlugin()
+    // ...utils.includeAssets([
+    //   {
+    //     path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+    //     type: 'css'
+    //   }
+    // ])
   ],
   optimization: {
     runtimeChunk: {

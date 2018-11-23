@@ -2,11 +2,10 @@ const path = require('path')
 const config = require('../config')
 const utils = require('../build/utils')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const vueLoaderConfig = require('./vue-loader.config')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 // 引入 DllReferencePlugin
 // const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
 const isDev = process.env.NODE_ENV === 'development'
-
 function resolve(dir) {
   return path.resolve(__dirname, '..', dir)
 }
@@ -49,8 +48,7 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
-        options: vueLoaderConfig
+        loader: 'vue-loader'
       },
       {
         test: /\.pug$/,
@@ -88,6 +86,24 @@ module.exports = {
             name: 'fonts/[name].[hash:6].[ext]'
           }
         }
+      },
+      {
+        test: /\.styl(us)?$/,
+        use: [
+          // isDev ?  'vue-style-loader' : MiniCssExtractPlugin.loader,
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          // 'postcss-loader',
+          'stylus-loader'
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader'
+        ]
       }
     ]
   },
@@ -106,6 +122,14 @@ module.exports = {
     // new DllReferencePlugin({
     //   manifest: require('./dist/manifest/echarts.manifest.json')
     // }),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new MiniCssExtractPlugin({
+      filename: isDev
+        ? 'css/[name].css'
+        : utils.assetsPath('css/[name].[chunkhash:6].css'),
+      chunkFilename: isDev
+        ? 'css/[id].css'
+        : utils.assetsPath('css/[id].[chunkhash:6].css')
+    })
   ]
 }

@@ -57,9 +57,10 @@ exports.cssLoaders = function(options) {
       })
     }
     if (options.extract) {
-      // loaders.splice(0, 1, MiniCssExtractPlugin.loader)
-      loaders.splice(1, 0, MiniCssExtractPlugin.loader)
+      loaders.splice(0, 1, MiniCssExtractPlugin.loader)
+      // loaders.splice(1, 0, MiniCssExtractPlugin.loader)
     }
+    console.log(loaders)
     return loaders
   }
 

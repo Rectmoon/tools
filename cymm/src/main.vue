@@ -13,6 +13,7 @@ export default {
 <style lang='stylus'>
 .kkk
   font-weight 800
-  font-size 16px
+  font-size 30px
   background orange
+  color #ccc
 </style>
