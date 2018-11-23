@@ -5,7 +5,7 @@ const config = require('../config')
 const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 // 引入 webpack-deep-scope-plugin 优化
 const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
@@ -26,13 +26,6 @@ const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
 const env = require('../config/prod.env')
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
-  // module: {
-  //   rules: utils.styleLoaders({
-  //     sourceMap: config.build.productionSourceMap,
-  //     extract: true,
-  //     usePostCSS: true
-  //   })
-  // },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
@@ -45,17 +38,17 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     // new MiniCssExtractPlugin({
-    //   filename: utils.assetsPath('css/[name].[chunkhash:6].css'),
-    //   chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css')
+    //   filename: utils.assetsPath('css/[name].css'),
+    //   chunkFilename: utils.assetsPath('css/[id].css')
     // }),
-    new OptimizeCSSPlugin({
-      cssProcessorOptions: config.build.productionSourceMap
-        ? { safe: true, map: { inline: false } }
-        : { safe: true }
-    }),
-    ...utils.htmlPlugins(baseWebpackConfig),
-    new webpack.HashedModuleIdsPlugin(),
-    new webpack.optimize.ModuleConcatenationPlugin(),
+    // new OptimizeCSSPlugin({
+    //   cssProcessorOptions: config.build.productionSourceMap
+    //     ? { safe: true, map: { inline: false } }
+    //     : { safe: true }
+    // }),
+    // ...utils.htmlPlugins(baseWebpackConfig),
+    // new webpack.HashedModuleIdsPlugin(),
+    // new webpack.optimize.ModuleConcatenationPlugin(),
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../static'),
@@ -63,13 +56,13 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*', '*.html']
       }
     ]),
-    new WebpackDeepScopeAnalysisPlugin()
-    // ...utils.includeAssets([
-    //   {
-    //     path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-    //     type: 'css'
-    //   }
-    // ])
+    new WebpackDeepScopeAnalysisPlugin(),
+    ...utils.includeAssets([
+      {
+        path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+        type: 'css'
+      }
+    ])
   ],
   optimization: {
     runtimeChunk: {
@@ -78,7 +71,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     minimize: true,
     noEmitOnErrors: true,
     splitChunks: {
-      chunks: 'async', // 必须三选一： "initial" | "all" | "async"
+      chunks: 'all', // 必须三选一： "initial" | "all" | "async"
       minSize: 30000, // 最小尺寸
       minChunks: 2, //must be greater than or equal 2. The minimum number of chunks which need to contain a module before it's moved into the commons chunk.
       maxAsyncRequests: 5, // 最大异步请求数
@@ -92,7 +85,6 @@ const webpackConfig = merge(baseWebpackConfig, {
           chunks: 'all', //all-异步加载快，但初始下载量较大，文件共用性好； initial-初始下载量较小，但异步加载量较大，文件间有重复内容
           priority: -10,
           reuseExistingChunk: false, // 选项用于配置在模块完全匹配时重用已有的块，而不是创建新块
-          // test: /node_modules\/(.*)/,
           test: /(react|react-dom)/
         }
         // common: {
@@ -159,3 +151,5 @@ if (config.build.bundleAnalyzerReport) {
 }
 
 module.exports = webpackConfig
+
+// "build": "cross-env NODE_ENV=production node build/build.js",
