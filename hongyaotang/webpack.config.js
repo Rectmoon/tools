@@ -1,4 +1,4 @@
-const mode = process.env.NODE_ENV.trim()
+const mode = process.env.NODE_ENV
 const analyze = process.env.npm_config_report
 const zip = process.env.npm_config_zip
 
