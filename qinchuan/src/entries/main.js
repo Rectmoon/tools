@@ -1,6 +1,7 @@
-import { sleep } from './utils/sleep'
+import { sleep } from '../utils/sleep'
 
 console.log(1)
+console.log(12)
 sleep(2).then(() => {
   console.log(333)
   console.log(343)

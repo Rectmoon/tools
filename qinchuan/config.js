@@ -1,11 +1,33 @@
 const fs = require('fs')
+const path = require('path')
+
 const getDependencies = () =>
   JSON.parse(fs.readFileSync('package.json', 'utf-8')).dependencies
 const vendors = Object.keys(getDependencies())
 
+function resolve(dir) {
+  return path.resolve(__dirname, dir)
+}
+
+function getFiles(dir) {
+  try {
+    return fs.readdirSync(dir)
+  } catch (e) {
+    return []
+  }
+}
+
+const entryDir = resolve('src/entries')
+const entries = getFiles(entryDir)
+  .filter(f => /\.js$/.test(f))
+  .reduce((res, next) => {
+    res.push(resolve(`${entryDir}/${next}`))
+    return res
+  }, [])
+
 module.exports = {
+  entries,
   browserify: {
-    entries: 'src/main.js',
     debug: true,
     external: vendors,
     plugin: [
@@ -44,6 +66,7 @@ module.exports = {
     ]
   },
   browserSync: {
+    files: ['**'],
     server: {
       baseDir: './'
     },
@@ -68,5 +91,5 @@ module.exports = {
     },
     sourceMap: { filename: 'bundle.js', url: 'bundle.js.map' }
   },
-  dir: 'demo'
+  dir: 'dist'
 }

@@ -14,31 +14,39 @@ const composer = require('gulp-uglify/composer')
 const minify = composer(uglifyjs, console)
 const pump = require('pump')
 const fileinclude = require('gulp-file-include')
+const es = require('event-stream')
 const DEFAULT_CONFIG = require('./config')
 
 function logError(err) {
   gutil.log(gutil.colors.red('[Error]'), err.toString())
 }
 
-function watching() {
-  const opts = Object.assign({}, watchify.args, DEFAULT_CONFIG.browserify)
-  const b = watchify(browserify(opts))
+function getFileName(s) {
+  let i = s.lastIndexOf('\\')
+  return s.slice(i + 1, s.lastIndexOf('.'))
+}
+
+function watching(entry) {
+  let opts = Object.assign({}, watchify.args, DEFAULT_CONFIG.browserify, {
+    entries: [entry]
+  })
+  let b = watchify(browserify(opts))
   b.on('update', () =>
-    doBindle(b).on('end', browserSync.reload.bind(browserSync))
+    doBindle(entry, b).on('end', browserSync.reload.bind(browserSync))
   )
   b.on('log', console.log.bind(console))
   return b
 }
 
-function doBindle(b) {
+function doBindle(entry, b) {
   return b
     .bundle()
     .on('error', logError)
-    .pipe(source('bundle.js'))
+    .pipe(source(`${getFileName(entry)}.js`))
     .pipe(buffer())
     .pipe($.sourcemaps.init({ loadMaps: true }))
     .pipe($.sourcemaps.write('./'))
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('dist/js/'))
 }
 
 function doLint(paths, exit) {
@@ -51,18 +59,34 @@ function doLint(paths, exit) {
 
 gulp.task('clean', () => del(['dist']))
 gulp.task('lint', () => doLint(['gulpfile.js', 'src/**/*.js'], true))
-gulp.task('build', ['clean', 'lint'], () =>
-  doBindle(browserify(DEFAULT_CONFIG.browserify))
-)
-gulp.task('watch', ['clean'], () => {
-  let w = gulp.watch(['gulpfile.js', 'src/**/*.js'])
-  w.on('change', e => {
+gulp.task('build', ['clean', 'lint'], () => {
+  const tasks = DEFAULT_CONFIG.entries.map(entry => {
+    return doBindle(
+      entry,
+      browserify({ entries: [entry], ...DEFAULT_CONFIG.browserify })
+    )
+  })
+  return es.merge.apply(null, tasks)
+})
+gulp.task('watch', () => {
+  browserSync.init(DEFAULT_CONFIG.browserSync)
+  require('opn')(`http://localhost:8080/${DEFAULT_CONFIG.dir}/index.html`)
+  let w1 = gulp.watch(['gulpfile.js', 'src/**/*.js'])
+  w1.on('change', e => {
     if (e.type === 'changed' || e.type === 'added') return doLint(e.path, false)
   })
-  return doBindle(watching()).on('end', () => {
-    browserSync.init(DEFAULT_CONFIG.browserSync)
-    require('opn')(`http://localhost:8080/${DEFAULT_CONFIG.dir}/index.html`)
+
+  let w2 = gulp.watch(['src/**/*.html'])
+  w2.on('change', e => {
+    if (e.type === 'changed' || e.type === 'added') {
+      gulp.start('html', browserSync.reload)
+    }
   })
+
+  const tasks = DEFAULT_CONFIG.entries.map(entry => {
+    return doBindle(entry, watching(entry)).on('end', browserSync.reload)
+  })
+  return es.merge.apply(null, tasks)
 })
 
 gulp.task('sprite', () => {
@@ -111,12 +135,12 @@ gulp.task('min', ['build'], cb => {
   pump(
     [
       gulp
-        .src('dist/bundle.js')
+        .src('dist/js/*.js')
         .pipe($.rename({ extname: '.min.js' }))
         .pipe($.sourcemaps.init({ loadMaps: true })),
       minify(DEFAULT_CONFIG.minify).on('error', logError),
       $.sourcemaps.write('./'),
-      gulp.dest('dist')
+      gulp.dest('dist/js')
     ],
     cb
   )
