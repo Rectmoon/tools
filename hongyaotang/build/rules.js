@@ -86,14 +86,22 @@ const eslintLoader = {
 }
 
 const tplLoader = {
-  test: /\.html$/,
+  test: /\.(html)$/,
   loader: 'raw-loader',
-  exclude: /static/
+  exclude: [/public/]
+}
+
+const pugTplLoader = {
+  test: /\.pug$/,
+  use: ['raw-loader', 'pug-html-loader'],
+  include: [resolve('src/entries')],
+  exclude: [/static/]
 }
 
 const pugLoader = {
   test: /\.pug$/,
-  loader: 'pug-html-loader'
+  loader: 'pug-html-loader',
+  exclude: /entries/
 }
 
 module.exports = function(env) {
@@ -112,6 +120,7 @@ module.exports = function(env) {
     imgLoader,
     fontLoader,
     tplLoader,
+    pugTplLoader,
     pugLoader
   )
   return loaders.concat(freeStyle)
