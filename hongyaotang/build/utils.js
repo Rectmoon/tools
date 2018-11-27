@@ -50,29 +50,32 @@ function initHtmlTemplate(env) {
     let tpl
     const f = getFileName(next)
     let title = env === 'development' ? '生平未见陈近南' : `这是${f}页`,
-      minify =
-        env === 'development'
-          ? {}
-          : {
-              removeComments: true,
-              collapseWhitespace: true,
-              removeAttributeQuotes: true
-            }
+      minify = {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      }
     const h = {
       filename: `${f}.html`,
       chunks: [f, 'vendor', 'manifest'],
       title,
-      minify
+      minify: false
     }
     const entryTpl = entryFiles.filter(
       n => /\.(pug|html)$/.test(n) && getFileName(n) == f
     )
     tpl = entryTpl.length
       ? { ...h, template: `${entryDir}/${entryTpl[0]}` }
-      : { ...h, template: defaultTemplatePath }
+      : { ...h, template: defaultTemplatePath, minify }
     res.push(new HtmlWebpackPlugin(tpl))
     return res
   }, [])
+}
+
+function assetsPath(_path) {
+  const assetsSubDirectory =
+    process.env.NODE_ENV === 'production' ? './' : 'static'
+  return path.posix.join(assetsSubDirectory, _path)
 }
 
 function includeAssets(extraCdn = []) {
@@ -119,6 +122,7 @@ function createNotifierCallback() {
 module.exports = {
   initConfig,
   resolve,
+  assetsPath,
   includeAssets,
   createNotifierCallback
 }

@@ -1,7 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const { resolve } = require('./alias')
-
+const { assetsPath } = require('./utils')
 const vueLoader = {
   test: /\.vue$/,
   use: 'vue-loader'
@@ -50,7 +50,7 @@ const videoLoader = {
   loader: 'url-loader',
   options: {
     limit: 50000,
-    name: 'media/[name].[hash:6].[ext]'
+    name: assetsPath('media/[name].[hash:6].[ext]')
   }
 }
 
@@ -59,7 +59,7 @@ const imgLoader = {
   loader: 'url-loader',
   options: {
     limit: 10000,
-    name: 'images/[name].[hash:6].[ext]'
+    name: assetsPath('images/[name].[hash:6].[ext]')
   }
 }
 
@@ -69,7 +69,7 @@ const fontLoader = {
     loader: 'file-loader',
     options: {
       limit: 4096,
-      name: 'fonts/[name].[hash:6].[ext]'
+      name: assetsPath('fonts/[name].[hash:6].[ext]')
     }
   }
 }
@@ -87,8 +87,13 @@ const eslintLoader = {
 
 const tplLoader = {
   test: /\.(html)$/,
-  loader: 'raw-loader',
-  exclude: [/public/]
+  loader: 'html-loader',
+  options: {
+    attrs: ['img:src', 'img:data-src', 'audio:src'],
+    minimize: true,
+    publicPath: './'
+  },
+  exclude: /public/
 }
 
 const pugTplLoader = {
@@ -108,7 +113,12 @@ module.exports = function(env) {
   const loaders = []
   if (env !== 'development') {
     freeStyle.forEach(style => {
-      style.use.splice(0, 1, MiniCssExtractPlugin.loader)
+      style.use.splice(0, 1, {
+        loader: MiniCssExtractPlugin.loader,
+        options: {
+          publicPath: '../'
+        }
+      })
     })
   } else {
     loaders.push(eslintLoader)
