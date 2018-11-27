@@ -8,6 +8,9 @@ module.exports = {
     },
     'postcss-import': {}, //遵循@import规则，可以将导入的样式合并到你的主样式表中。
     cssnano: {}, //相同css合并（例：.a{width:100px},.b{width:100px} => .a,.b{width:100px})
+    'postcss-sprites': {
+      spritePath: './dist/images'
+    },
     'postcss-pxtorem': {
       rootValue: 16,
       unitPrecision: 5,
