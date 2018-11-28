@@ -9,6 +9,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
   .default
 
+const { useExternals, extractEntries } = require('./ying.config')
 const { resolve } = require('./alias')
 const { includeAssets, createNotifierCallback } = require('./utils')
 const externals = require('./externals')
@@ -54,12 +55,15 @@ module.exports = function(mode, { option }) {
       new MiniCssExtractPlugin({
         filename: 'css/[name].[chunkhash:6].css'
       }),
-      ...includeAssets([
-        {
-          path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-          type: 'css'
-        }
-      ]),
+      ...includeAssets(
+        [
+          {
+            path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+            type: 'css'
+          }
+        ],
+        {}
+      ),
       new WebpackDeepScopeAnalysisPlugin()
     ]
     if (option.analyze) {
@@ -121,10 +125,16 @@ module.exports = function(mode, { option }) {
         },
         splitChunks: {
           cacheGroups: {
-            commons: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendor',
-              chunks: 'all'
+            common: {
+              test: /common\/|components\//,
+              name: 'common',
+              priority: 10,
+              enforce: true
+            },
+            default: {
+              minChunks: 1,
+              priority: -20,
+              reuseExistingChunk: true
             }
           }
         },
@@ -155,8 +165,20 @@ module.exports = function(mode, { option }) {
         source: false,
         children: false
       },
-      externals,
       plugins
+    }
+    if (useExternals) {
+      destiny.externals = externals
+      destiny.plugins = destiny.plugins.concat(includeAssets([], externals))
+    } else {
+      Object.keys(extractEntries).forEach(name => {
+        let reg = extractEntries[name].join('|')
+        destiny.optimization.splitChunks.cacheGroups[name] = {
+          test: new RegExp(`${reg}`),
+          name,
+          chunks: 'initial'
+        }
+      })
     }
   }
 

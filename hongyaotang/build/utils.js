@@ -5,8 +5,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 
 const { alias, resolve } = require('./alias')
-const externals = require('./externals')
+
 const library = require('./library')
+const { useExternals, extractEntries } = require('./ying.config')
 
 const packageConfig = require('../package.json')
 
@@ -32,7 +33,7 @@ const entryJs = entryFiles.filter(f => /\.js$/.test(f))
 const defaultTemplatePath = resolve('public/index.html')
 
 function initEntryAndOutput(env) {
-  return entryJs.reduce(
+  const result = entryJs.reduce(
     (res, next) => {
       let e = getFileName(next)
       res.entry[e] = resolve(`${entryDir}/${next}`)
@@ -43,6 +44,12 @@ function initEntryAndOutput(env) {
     },
     { entry: {}, output: {} }
   )
+  if (!useExternals && extractEntries) {
+    Object.keys(extractEntries).forEach(key => {
+      result.entry[key] = extractEntries[key]
+    })
+  }
+  return result
 }
 
 function initHtmlTemplate(env) {
@@ -55,9 +62,18 @@ function initHtmlTemplate(env) {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       }
+    let chunks = [f, 'manifest']
+    const str = fs.readFileSync(`${entryDir}/${next}`, 'utf-8')
+    if (!useExternals) {
+      Object.keys(extractEntries).forEach(key => {
+        if (extractEntries[key].some(k => str.indexOf(k) > -1)) {
+          chunks.unshift(key)
+        }
+      })
+    }
     const h = {
       filename: `${f}.html`,
-      chunks: [f, 'vendor', 'manifest'],
+      chunks,
       title,
       minify: false
     }
@@ -78,11 +94,11 @@ function assetsPath(_path) {
   return path.posix.join(assetsSubDirectory, _path)
 }
 
-function includeAssets(extraCdn = []) {
+function includeAssets(extraCdn = [], externals = {}) {
   return entryJs.map(n => {
     let cdnPaths = []
-    const str = fs.readFileSync(`${entryDir}/${n}`, 'utf-8')
     Object.keys(externals).forEach(lib => {
+      const str = fs.readFileSync(`${entryDir}/${n}`, 'utf-8')
       if (library[lib] && str.indexOf(lib) > -1) {
         cdnPaths.push(library[lib])
       }
