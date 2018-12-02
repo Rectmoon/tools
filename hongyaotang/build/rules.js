@@ -98,9 +98,9 @@ const pugLoader = {
   exclude: /entries/
 }
 
-module.exports = function(env) {
+module.exports = function(mode) {
   const loaders = []
-  if (env !== 'development') {
+  if (mode !== 'development') {
     freeStyle.forEach(style => {
       style.use.splice(0, 1, {
         loader: MiniCssExtractPlugin.loader,

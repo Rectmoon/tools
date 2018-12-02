@@ -9,14 +9,20 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
   .default
 
-const { useExternals, extractEntries, makeZip } = require('./ying.config')
+const {
+  useExternals,
+  extractEntries,
+  analyze,
+  zip,
+  makeZip
+} = require('../ying.config')
 const { resolve } = require('./alias')
 const { includeAssets, createNotifierCallback } = require('./utils')
 const externals = require('./externals')
 const webpackBaseFn = require('./base.config')
 const devServer = require('./devser.config')
 
-module.exports = function(mode, { option }) {
+module.exports = function(mode) {
   const baseConfig = webpackBaseFn(mode)
   let plugins, destiny
   if (mode === 'development') {
@@ -53,7 +59,8 @@ module.exports = function(mode, { option }) {
         dry: false
       }),
       new MiniCssExtractPlugin({
-        filename: 'css/[name].[chunkhash:6].css'
+        filename: 'css/[name].[chunkhash:6].css',
+        chunkFilename: 'css/[id].[chunkhash:6].css'
       }),
       ...includeAssets(
         [
@@ -66,7 +73,8 @@ module.exports = function(mode, { option }) {
       ),
       new WebpackDeepScopeAnalysisPlugin()
     ]
-    if (option.analyze) {
+
+    if (analyze) {
       const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
         .BundleAnalyzerPlugin
       plugins.push(
@@ -102,7 +110,8 @@ module.exports = function(mode, { option }) {
         })
       )
     }
-    if (option.zip) {
+
+    if (zip) {
       const CompressionWebpackPlugin = require('compression-webpack-plugin')
       const zopfli = require('@gfx/zopfli')
       plugins.push(
@@ -114,6 +123,16 @@ module.exports = function(mode, { option }) {
           test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
           threshold: 10240,
           minRatio: 0.8
+        })
+      )
+    }
+
+    if (makeZip) {
+      const ZipPlugin = require('zip-webpack-plugin')
+      plugins.push(
+        new ZipPlugin({
+          path: resolve('dist'),
+          filename: 'rectmoon.zip'
         })
       )
     }
@@ -180,16 +199,6 @@ module.exports = function(mode, { option }) {
           chunks: 'initial'
         }
       })
-    }
-
-    if (makeZip) {
-      const ZipPlugin = require('zip-webpack-plugin')
-      destiny.plugins.push(
-        new ZipPlugin({
-          path: resolve('dist'),
-          filename: 'rectmoon.zip'
-        })
-      )
     }
   }
 

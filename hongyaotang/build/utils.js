@@ -7,7 +7,7 @@ const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plug
 const { alias, resolve } = require('./alias')
 
 const library = require('./library')
-const { useExternals, extractEntries } = require('./ying.config')
+const { useExternals, extractEntries } = require('../ying.config')
 
 const packageConfig = require('../package.json')
 
@@ -32,31 +32,36 @@ const entryJs = entryFiles.filter(f => /\.js$/.test(f))
 
 const defaultTemplatePath = resolve('public/index.html')
 
-function initEntryAndOutput(env) {
+function initEntryAndOutput(mode) {
   const result = entryJs.reduce(
     (res, next) => {
       let e = getFileName(next)
       res.entry[e] = resolve(`${entryDir}/${next}`)
-      res.output.path = outputDir
-      res.output.filename =
-        env === 'development' ? 'js/[name].js' : 'js/[name].[chunkhash:6].js'
       return res
     },
-    { entry: {}, output: {} }
+    { entry: {} }
   )
   if (!useExternals && extractEntries) {
     Object.keys(extractEntries).forEach(key => {
       result.entry[key] = extractEntries[key]
     })
   }
+  result.output = {
+    path: outputDir,
+    filename: 'js/[name].js'
+  }
+  if (mode !== 'development') {
+    result.output.filename = 'js/[name].[chunkhash:6].js'
+    result.output.chunkFilename = 'js/[id].[chunkhash:6].js'
+  }
   return result
 }
 
-function initHtmlTemplate(env) {
+function initHtmlTemplate(mode) {
   return entryJs.reduce((res, next) => {
     let tpl
     const f = getFileName(next)
-    let title = env === 'development' ? '生平未见陈近南' : `这是${f}页`,
+    let title = mode === 'development' ? '生平未见陈近南' : `这是${f}页`,
       minify = {
         removeComments: true,
         collapseWhitespace: true,
@@ -114,11 +119,11 @@ function includeAssets(extraCdn = [], externals = {}) {
   })
 }
 
-function initConfig(env) {
+function initConfig(mode) {
   return {
     alias,
-    ...initEntryAndOutput(env),
-    htmlPlugins: initHtmlTemplate(env)
+    ...initEntryAndOutput(mode),
+    htmlPlugins: initHtmlTemplate(mode)
   }
 }
 

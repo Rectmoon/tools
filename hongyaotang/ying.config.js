@@ -7,5 +7,5 @@ module.exports = {
   },
   analyze: false,
   zip: false,
-  makeZip: false
+  makeZip: true
 }
