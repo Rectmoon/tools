@@ -1,4 +1,5 @@
-require('./main.html')
+if (process.env == 'development') require('raw-loader!./main.html')
+
 import '@/assets/styles/main.css'
 
 const add = (pre, next) => pre + next

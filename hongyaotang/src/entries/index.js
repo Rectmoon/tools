@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import Home from '@/page/index.vue'
+import Home from './index.vue'
 
 function fn() {
   console.log(123)

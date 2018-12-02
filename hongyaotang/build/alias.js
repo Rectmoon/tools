@@ -6,6 +6,7 @@ function resolve(dir) {
 
 module.exports = {
   alias: {
+    vue$: 'vue/dist/vue.js',
     '@': resolve('src'),
     '@util': resolve('src/util'),
     '@shared': resolve('src/shared'),

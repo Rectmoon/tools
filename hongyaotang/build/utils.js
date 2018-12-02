@@ -75,11 +75,13 @@ function initHtmlTemplate(env) {
       filename: `${f}.html`,
       chunks,
       title,
+      favicon: resolve('public/favor.png'),
       minify: false
     }
     const entryTpl = entryFiles.filter(
       n => /\.(pug|html)$/.test(n) && getFileName(n) == f
     )
+
     tpl = entryTpl.length
       ? { ...h, template: `${entryDir}/${entryTpl[0]}` }
       : { ...h, template: defaultTemplatePath, minify }
@@ -137,7 +139,6 @@ function createNotifierCallback() {
 
 module.exports = {
   initConfig,
-  resolve,
   assetsPath,
   includeAssets,
   createNotifierCallback

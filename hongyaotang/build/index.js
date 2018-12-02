@@ -9,7 +9,7 @@ const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
   .default
 
-const { useExternals, extractEntries } = require('./ying.config')
+const { useExternals, extractEntries, makeZip } = require('./ying.config')
 const { resolve } = require('./alias')
 const { includeAssets, createNotifierCallback } = require('./utils')
 const externals = require('./externals')
@@ -167,6 +167,7 @@ module.exports = function(mode, { option }) {
       },
       plugins
     }
+
     if (useExternals) {
       destiny.externals = externals
       destiny.plugins = destiny.plugins.concat(includeAssets([], externals))
@@ -179,6 +180,16 @@ module.exports = function(mode, { option }) {
           chunks: 'initial'
         }
       })
+    }
+
+    if (makeZip) {
+      const ZipPlugin = require('zip-webpack-plugin')
+      destiny.plugins.push(
+        new ZipPlugin({
+          path: resolve('dist'),
+          filename: 'rectmoon.zip'
+        })
+      )
     }
   }
 

@@ -1,6 +1,5 @@
 const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const { resolve } = require('./alias')
 const { initConfig } = require('./utils')
@@ -33,16 +32,9 @@ module.exports = function(mode) {
       //   manifest: require('./dist/manifest/echarts.manifest.json')
       // }),
       new webpack.DefinePlugin({
-        'process.env': `${mode}`
+        'process.env': `${JSON.stringify(mode)}`
       }),
       new VueLoaderPlugin(),
-      new CopyWebpackPlugin([
-        {
-          from: resolve('public'),
-          to: resolve('dist'),
-          ignore: ['.*']
-        }
-      ]),
       ...htmlPlugins
     ]
   }

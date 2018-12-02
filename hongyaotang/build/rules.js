@@ -85,17 +85,6 @@ const eslintLoader = {
   }
 }
 
-const tplLoader = {
-  test: /\.(html)$/,
-  loader: 'html-loader',
-  options: {
-    attrs: ['img:src', 'img:data-src', 'audio:src'],
-    minimize: true,
-    publicPath: './'
-  },
-  exclude: /public/
-}
-
 const pugTplLoader = {
   test: /\.pug$/,
   use: ['raw-loader', 'pug-html-loader'],
@@ -129,7 +118,6 @@ module.exports = function(env) {
     videoLoader,
     imgLoader,
     fontLoader,
-    tplLoader,
     pugTplLoader,
     pugLoader
   )
