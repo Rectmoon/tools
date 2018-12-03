@@ -6,12 +6,12 @@
 </template>
 
 <script>
-import Son from '@/components/son.vue'
+import Son from "@/components/son.vue";
 export default {
   components: {
     Son
   }
-}
+};
 </script>
 
 <style lang='stylus'>
