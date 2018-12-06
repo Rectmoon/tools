@@ -1,11 +1,12 @@
 module.exports = {
-  useExternals: true,
+  useExternals: false,
+  useDll: true,
   extractEntries: {
     vue: ['vue', 'vue-router', 'vuex'],
     react: ['react', 'react-dom'],
     vendor: ['jquery', 'axios']
   },
   analyze: false,
-  zip: false,
+  useGzip: false,
   makeZip: true
 }

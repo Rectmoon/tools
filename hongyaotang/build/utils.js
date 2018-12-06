@@ -5,13 +5,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 
 const { alias, resolve } = require('./alias')
-
 const library = require('./library')
-const { useExternals, extractEntries } = require('../ying.config')
-
+const { useExternals, useDll, extractEntries } = require('../ying.config')
 const packageConfig = require('../package.json')
-
-const isDev = process.env.NODE_ENV === 'development'
 
 function getFiles(dir) {
   try {
@@ -41,7 +37,7 @@ function initEntryAndOutput(mode) {
     },
     { entry: {} }
   )
-  if (!useExternals && extractEntries) {
+  if (!useExternals && !useDll && extractEntries) {
     Object.keys(extractEntries).forEach(key => {
       result.entry[key] = extractEntries[key]
     })
@@ -67,9 +63,14 @@ function initHtmlTemplate(mode) {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       }
-    let chunks = [f, 'manifest']
+    let chunks = ['manifest', f]
     const str = fs.readFileSync(`${entryDir}/${next}`, 'utf-8')
-    if (!useExternals) {
+    ;(str.indexOf('common') > -1 || str.indexOf('components') > -1) &&
+      chunks.unshift('common')
+    ;/(reset|common|base)\.(s?css|sass|styl|less)/.test(str) &&
+      chunks.unshift('styles')
+
+    if (!useExternals && !useDll) {
       Object.keys(extractEntries).forEach(key => {
         if (extractEntries[key].some(k => str.indexOf(k) > -1)) {
           chunks.unshift(key)

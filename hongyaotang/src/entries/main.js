@@ -1,6 +1,9 @@
 if (process.env == 'development') require('raw-loader!./main.html')
 
+import '@/assets/styles/reset.css'
 import '@/assets/styles/main.css'
+
+console.log(567)
 
 const add = (pre, next) => pre + next
 

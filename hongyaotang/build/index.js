@@ -11,9 +11,10 @@ const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
 
 const {
   useExternals,
+  useDll,
   extractEntries,
   analyze,
-  zip,
+  useGzip,
   makeZip
 } = require('../ying.config')
 const { resolve } = require('./alias')
@@ -24,7 +25,7 @@ const devServer = require('./devser.config')
 
 module.exports = function(mode) {
   const baseConfig = webpackBaseFn(mode)
-  let plugins, destiny
+  let destiny, plugins
   if (mode === 'development') {
     plugins = [
       new webpack.HotModuleReplacementPlugin(),
@@ -62,16 +63,16 @@ module.exports = function(mode) {
         filename: 'css/[name].[chunkhash:6].css',
         chunkFilename: 'css/[id].[chunkhash:6].css'
       }),
-      ...includeAssets(
-        [
-          {
-            path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-            type: 'css'
-          }
-        ],
-        {}
-      ),
       new WebpackDeepScopeAnalysisPlugin()
+      // ...includeAssets(
+      //   [
+      //     {
+      //       path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+      //       type: 'css'
+      //     }
+      //   ],
+      //   {}
+      // ),
     ]
 
     if (analyze) {
@@ -111,7 +112,7 @@ module.exports = function(mode) {
       )
     }
 
-    if (zip) {
+    if (useGzip) {
       const CompressionWebpackPlugin = require('compression-webpack-plugin')
       const zopfli = require('@gfx/zopfli')
       plugins.push(
@@ -132,7 +133,8 @@ module.exports = function(mode) {
       plugins.push(
         new ZipPlugin({
           path: resolve('dist'),
-          filename: 'rectmoon.zip'
+          filename: 'rectmoon.zip',
+          exclude: [/\.js\.map$/, /\.css\.map$/]
         })
       )
     }
@@ -144,16 +146,22 @@ module.exports = function(mode) {
         },
         splitChunks: {
           cacheGroups: {
+            default: false,
             common: {
-              test: /common\/|components\//,
+              test: /[\\/]src[\\/](common|components)[\\/]/,
+              minChunks: 2,
+              minSize: 2,
+              chunks: 'initial',
               name: 'common',
               priority: 10,
-              enforce: true
-            },
-            default: {
-              minChunks: 1,
-              priority: -20,
+              enforce: true,
               reuseExistingChunk: true
+            },
+            styles: {
+              name: 'styles',
+              test: /(reset|common|base)\.(s?css|sass|styl|less)/,
+              chunks: 'initial',
+              enforce: true
             }
           }
         },
@@ -190,7 +198,7 @@ module.exports = function(mode) {
     if (useExternals) {
       destiny.externals = externals
       destiny.plugins = destiny.plugins.concat(includeAssets([], externals))
-    } else {
+    } else if (!useDll) {
       Object.keys(extractEntries).forEach(name => {
         let reg = extractEntries[name].join('|')
         destiny.optimization.splitChunks.cacheGroups[name] = {

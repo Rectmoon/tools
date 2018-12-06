@@ -1,9 +1,8 @@
 if (process.env == 'development') require('./lzx.pug')
 
-import { pickOpts } from '@/common/util'
 import Vue from 'vue'
-
-console.log(pickOpts({ a: 1, b: 2 }, ['a']))
+import '@/assets/styles/reset.css'
+import '@/assets/styles/lzx.css'
 
 console.log(234)
 
