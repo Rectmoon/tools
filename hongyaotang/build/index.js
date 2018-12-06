@@ -15,7 +15,8 @@ const {
   extractEntries,
   analyze,
   useGzip,
-  makeZip
+  makeZip,
+  assetsToInclude
 } = require('../ying.config')
 const { resolve } = require('./alias')
 const { includeAssets, createNotifierCallback } = require('./utils')
@@ -63,16 +64,8 @@ module.exports = function(mode) {
         filename: 'css/[name].[chunkhash:6].css',
         chunkFilename: 'css/[id].[chunkhash:6].css'
       }),
-      new WebpackDeepScopeAnalysisPlugin()
-      // ...includeAssets(
-      //   [
-      //     {
-      //       path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-      //       type: 'css'
-      //     }
-      //   ],
-      //   {}
-      // ),
+      new WebpackDeepScopeAnalysisPlugin(),
+      ...includeAssets(assetsToInclude, {})
     ]
 
     if (analyze) {
@@ -128,15 +121,14 @@ module.exports = function(mode) {
       )
     }
 
-    if (makeZip) {
+    if (makeZip.on) {
       const ZipPlugin = require('zip-webpack-plugin')
-      plugins.push(
-        new ZipPlugin({
-          path: resolve('dist'),
-          filename: 'rectmoon.zip',
-          exclude: [/\.js\.map$/, /\.css\.map$/]
-        })
-      )
+      const option = {
+        path: resolve('dist'),
+        filename: `${makeZip.name}.zip`
+      }
+      if (!makeZip.sourceMap) option.exclude = /\.(\w)*\.map$/
+      plugins.push(new ZipPlugin(option))
     }
 
     destiny = {

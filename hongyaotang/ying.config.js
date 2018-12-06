@@ -8,5 +8,15 @@ module.exports = {
   },
   analyze: false,
   useGzip: false,
-  makeZip: true
+  makeZip: {
+    on: true,
+    name: 'reactmoon',
+    sourceMap: false
+  },
+  assetsToInclude: [
+    {
+      path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
+      type: 'css'
+    }
+  ]
 }

@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 const { resolve } = require('./alias')
-const { initConfig, includeAssets } = require('./utils')
+const { initConfig } = require('./utils')
 const initRules = require('./rules')
 const { useDll } = require('../ying.config')
 
