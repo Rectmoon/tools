@@ -20,20 +20,20 @@ export default {
   data() {
     return {
       style: {
-        color: 'lightblue',
+        color: "lightblue",
         fontWeight: 600
       },
-      msg: 'okok'
-    }
+      msg: "okok"
+    };
   },
   methods: {
     clickMe() {
-      console.log(123)
-      console.log('fantasy')
-      console.log(456)
+      console.log(12345);
+      console.log("fantasy");
+      console.log(456);
     }
   }
-}
+};
 </script>
 
 <style scoped lang='stylus'>

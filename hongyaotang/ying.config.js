@@ -1,15 +1,15 @@
 module.exports = {
-  useExternals: false,
-  useDll: true,
+  useExternals: true,
+  useDll: false,
   extractEntries: {
-    vue: ['vue', 'vue-router', 'vuex'],
+    vue: ['vue'],
     react: ['react', 'react-dom'],
     vendor: ['jquery', 'axios']
   },
   analyze: false,
   useGzip: false,
   makeZip: {
-    on: true,
+    on: false,
     name: 'reactmoon',
     sourceMap: false
   },

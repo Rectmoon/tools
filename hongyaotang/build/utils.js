@@ -77,6 +77,7 @@ function initHtmlTemplate(mode) {
         }
       })
     }
+
     const h = {
       filename: `${f}.html`,
       chunks,

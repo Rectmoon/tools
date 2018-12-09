@@ -25,8 +25,8 @@ html, body
   overflow hidden
 
 #box
-  width 1000px
-  height 1000px
+  width 100%
+  height 100%
   display flex
-  background orange
+  background yellow
 </style>

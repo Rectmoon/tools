@@ -13,7 +13,7 @@ const alias = {
   '@assets': resolve('src/assets')
 }
 
-if (!useDll) alias['vue$'] = 'vue/dist/vue.js'
+if (!useDll) alias['vue$'] = 'vue/dist/vue.esm.js'
 
 module.exports = {
   alias,
