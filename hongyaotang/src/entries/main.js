@@ -3,7 +3,7 @@ if (process.env == 'development') require('raw-loader!./main.html')
 import '@/assets/styles/reset.css'
 import '@/assets/styles/main.css'
 import '@/common/rem.js'
- 
+
 console.log(567)
 
 const add = (pre, next) => pre + next
@@ -16,5 +16,6 @@ async function main() {
   console.log(10)
 }
 
-console.log(234)
+console.log(23412315)
+
 main()

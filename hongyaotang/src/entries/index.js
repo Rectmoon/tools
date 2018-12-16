@@ -7,7 +7,7 @@ function fn() {
   console.log(123)
 }
 
-log(123)
+log(123456)
 new Vue({
   render: h => h(Home)
 }).$mount('#app')

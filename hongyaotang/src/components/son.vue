@@ -3,7 +3,7 @@
     div.container
       h3 {{msg}}
       p(:style="{color:'#000'}",:htmlData="msg") p label
-      button(@click="clickMe") clickTest
+      button(@click="clickMe") click
       hr
 </template>
 
@@ -12,7 +12,7 @@
     div.hello
       h3 {{msg}}
       p(:style="{color:'#000'}",:htmlData="msg") p label
-      button(@click="clickMe") clickTest
+      button(@click="clickMe") clickTe
 </template>
  
 <script>
@@ -23,7 +23,7 @@ export default {
         color: 'lightblue',
         fontWeight: 600
       },
-      msg: 'okok'
+      msg: 'okok12'
     }
   },
   methods: {
