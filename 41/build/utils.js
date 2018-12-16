@@ -4,6 +4,7 @@ const glob = require('glob')
 const config = require('../config')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const packageConfig = require('../package.json')
 
 const isProd = process.env.NODE_ENV === 'production'
 

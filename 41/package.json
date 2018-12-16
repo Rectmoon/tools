@@ -1,7 +1,7 @@
 {
   "name": "41",
   "version": "1.0.0",
-  "description": "pure page",
+  "description": "static page",
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --progress --config build/webpack.dev.config.js",
