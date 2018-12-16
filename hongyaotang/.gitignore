@@ -2,3 +2,4 @@
 /dist/*
 /temp/*
 package-lock.json
+../**

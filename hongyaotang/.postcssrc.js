@@ -12,7 +12,7 @@ module.exports = {
       spritePath: './dist/images'
     },
     'postcss-pxtorem': {
-      rootValue: 100,
+      rootValue: 50,
       unitPrecision: 5,
       propWhiteList: []
     },
