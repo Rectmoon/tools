@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>heiheihei</title>
   </head>
@@ -16,7 +19,9 @@
     <div class="demo1"></div>
     <div class="demo2"></div>
     <h1>hello</h1>
-    <div><img src=<%= require('@/assets/images/3.png') %> alt="" width="50" height="50" /></div>
+    <div style="display: flex;">
+      <img src=<%= require('@/assets/images/3.png') %> alt="" style="width:.6rem;height:.6rem;" />
+    </div>
 
     <%= require('raw-loader!@/layouts/html/footer.html') %>
   </body>
