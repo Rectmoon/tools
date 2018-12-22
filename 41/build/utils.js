@@ -113,7 +113,7 @@ exports.getHtmlPlugins = function() {
     return new HtmlWebpackPlugin({
       template: p[1],
       filename: isProd
-        ? path.resolve(__dirname, `../dist/pages/${p[0]}.html`)
+        ? path.resolve(__dirname, `../dist/${p[0]}.html`)
         : `${p[0]}.html`,
       chunks,
       inject: true,
