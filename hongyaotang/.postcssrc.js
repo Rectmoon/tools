@@ -14,7 +14,8 @@ module.exports = {
     'postcss-pxtorem': {
       rootValue: 50,
       unitPrecision: 5,
-      propWhiteList: []
+      propWhiteList: [],
+      selectorBlackList: [/header$/, /footer$/]
     },
     autoprefixer: {
       browsers: ['last 5 version', 'Android >= 4.0'],

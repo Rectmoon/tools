@@ -8,8 +8,7 @@ const initRules = require('./rules')
 const { useDll } = require('../ying.config')
 
 module.exports = function(mode) {
-  const devtool =
-    mode === 'development' ? 'cheap-module-eval-source-map' : '#source-map'
+  const devtool = mode === 'development' ? 'cheap-module-eval-source-map' : '#source-map'
   const { entry, output, alias, htmlPlugins } = initConfig(mode)
 
   const loaders = initRules(mode)
@@ -52,7 +51,7 @@ module.exports = function(mode) {
     entry,
     output,
     resolve: {
-      extensions: ['*', '.js', 'jsx', '.json', '.vue', '.styl'],
+      extensions: ['.js', 'jsx', '.json', '.vue', '.styl'],
       modules: [resolve('node_modules')],
       alias
     },

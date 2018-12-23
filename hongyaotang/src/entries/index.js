@@ -1,13 +1,9 @@
 import Vue from 'vue'
+import router from '@/router/index/index'
 
-import Home from './index.vue'
-import { log } from '@/common/util'
-
-function fn() {
-  console.log(123)
-}
-
-log(123456)
+import App from './index.vue'
+import '@/common/rem.js'
 new Vue({
-  render: h => h(Home)
+  router,
+  render: h => h(App)
 }).$mount('#app')

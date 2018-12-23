@@ -1,10 +1,17 @@
 <template>
-  <div>
-    <router-view></router-view>
-  </div>
+  <Page title="首页">
+    <div slot="content">111</div>
+  </Page>
 </template>
  
-
+<script>
+import Page from '@/components/page/page.vue'
+export default {
+  components: {
+    Page
+  }
+}
+</script>
 
 <style lang='stylus'>
 *

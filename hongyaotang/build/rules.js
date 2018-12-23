@@ -112,14 +112,6 @@ module.exports = function(mode) {
   } else {
     loaders.push(eslintLoader)
   }
-  loaders.push(
-    vueLoader,
-    jsLoader,
-    videoLoader,
-    imgLoader,
-    fontLoader,
-    pugTplLoader,
-    pugLoader
-  )
+  loaders.push(vueLoader, jsLoader, videoLoader, imgLoader, fontLoader, pugTplLoader, pugLoader)
   return loaders.concat(freeStyle)
 }

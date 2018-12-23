@@ -6,8 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 
-const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin')
-  .default
+const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin').default
 
 const {
   useExternals,
@@ -34,11 +33,7 @@ module.exports = function(mode) {
       new webpack.NoEmitOnErrorsPlugin(),
       new FriendlyErrorsPlugin({
         compilationSuccessInfo: {
-          messages: [
-            `Your application is running here: http://${devServer.host}:${
-              devServer.port
-            }`
-          ]
+          messages: [`Your application is running here: http://${devServer.host}:${devServer.port}`]
         },
         onErrors: createNotifierCallback()
       })
@@ -69,8 +64,7 @@ module.exports = function(mode) {
     ]
 
     if (analyze) {
-      const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-        .BundleAnalyzerPlugin
+      const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
       plugins.push(
         new BundleAnalyzerPlugin({
           //  可以是`server`，`static`或`disabled`。
