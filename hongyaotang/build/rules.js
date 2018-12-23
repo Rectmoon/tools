@@ -4,7 +4,16 @@ const { resolve } = require('./alias')
 const { assetsPath } = require('./utils')
 const vueLoader = {
   test: /\.vue$/,
-  use: 'vue-loader'
+  use: [
+    {
+      loader: 'vue-loader',
+      options: {
+        compilerOptions: {
+          preserveWhitespace: false
+        }
+      }
+    }
+  ]
 }
 
 const cssLoader = {
@@ -33,8 +42,18 @@ const lessLoader = {
   use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'less-loader']
 }
 const stylusLoader = {
-  test: /\.styl(us)$/,
-  use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'stylus-loader']
+  test: /\.styl(us)?$/,
+  use: [
+    'vue-style-loader',
+    'css-loader',
+    {
+      loader: 'postcss-loader',
+      options: {
+        sourceMap: true
+      }
+    },
+    'stylus-loader'
+  ]
 }
 
 const freeStyle = [cssLoader, sassLoader, lessLoader, stylusLoader]

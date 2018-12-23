@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      backIcon: require('@assets/images/back.svg')
+      backIcon: require('assets/images/back.svg')
     }
   },
   methods: {
@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style lang='stylus' scoped>
-@import '../../assets/styles/stylus/variable.styl'
+@import '~assets/styles/stylus/variable'
 
 .page
   position fixed
