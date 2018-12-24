@@ -15,7 +15,7 @@ module.exports = {
       rootValue: 50,
       unitPrecision: 5,
       propWhiteList: [],
-      selectorBlackList: [/header$/, /footer$/]
+      selectorBlackList: [/header$/, /footer$/, '.vux-', '.veui-', '.mt-', '.mint-']
     },
     autoprefixer: {
       browsers: ['last 5 version', 'Android >= 4.0'],
