@@ -6,9 +6,25 @@
  
 <script>
 import Page from '@/components/page/page.vue'
+import { getData1, postData1 } from '@/api/home'
 export default {
   components: {
     Page
+  },
+  mounted() {
+    this.getData()
+  },
+  methods: {
+    getData() {
+      getData1().then(data => {
+        console.log(data)
+      })
+      setTimeout(() => {
+        postData1(1).then(res => {
+          console.log(res)
+        })
+      }, 300)
+    }
   }
 }
 </script>

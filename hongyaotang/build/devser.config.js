@@ -11,6 +11,8 @@ const apiList = [
   }
 ]
 
+const data1 = require('../src/mock/data.json')
+
 module.exports = {
   proxy: {},
   before(app) {
@@ -30,6 +32,15 @@ module.exports = {
           .catch(e => {
             console.log(e)
           })
+      })
+    })
+    app.get('/api/data1', (req, res) => {
+      res.json(data1)
+    })
+    app.post('/api/data1', (req, res) => {
+      res.json({
+        err: 0,
+        msg: 'success'
       })
     })
   },
