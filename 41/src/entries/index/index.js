@@ -1,4 +1,4 @@
 if (process.env.NODE_ENV == 'development') require('raw-loader!./index.html')
 
-import '@/styles/index.styl'
-import '@/styles/layout.styl'
+import '@/assets/styles/index.styl'
+import '@/assets/styles/layout.styl'

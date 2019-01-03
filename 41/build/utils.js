@@ -56,10 +56,7 @@ exports.cssLoaders = function(options) {
 
     if (options.extract) {
       loaders.splice(0, 1, {
-        loader: MiniCssExtractPlugin.loader,
-        options: {
-          publicPath: '../'
-        }
+        loader: MiniCssExtractPlugin.loader
       })
     }
     return loaders

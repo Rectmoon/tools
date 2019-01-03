@@ -1,2 +1,2 @@
-import '@/styles/article.styl'
-import '@/styles/layout.styl'
+import '@/assets/styles/article.styl'
+import '@/assets/styles/layout.styl'

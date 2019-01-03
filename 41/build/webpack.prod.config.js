@@ -28,8 +28,8 @@ const webpackConfig = merge(baseWebpackConfig, {
 
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash:6].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash:6].js')
+    filename: utils.assetsPath('js/[name].[chunkhash:6].js', true),
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash:6].js', true)
   },
 
   plugins: [
@@ -48,8 +48,8 @@ const webpackConfig = merge(baseWebpackConfig, {
 
     ...utils.getHtmlPlugins(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[chunkhash:6].css',
-      chunkFilename: 'css/[id].[chunkhash:6].css'
+      filename: utils.assetsPath('css/[name].[chunkhash:6].css', true),
+      chunkFilename: utils.assetsPath('css/[id].[chunkhash:6].css', true)
     }),
     new CopyWebpackPlugin([
       {

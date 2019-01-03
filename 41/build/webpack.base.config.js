@@ -38,11 +38,11 @@ module.exports = {
             }
           },
           {
-            issuer: /\.(css|stylus)$/,
+            issuer: /\.(css|stylus|styl)$/,
             loader: 'url-loader',
             options: {
-              limit: 10000,
-              name: utils.assetsPath('images/[name].[hash:6].[ext]')
+              limit: 1000,
+              name: utils.assetsPath('images/[name].[hash:6].[ext]', true)
             }
           }
         ]
@@ -52,15 +52,15 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('media/[name].[hash:6].[ext]')
+          name: utils.assetsPath('media/[name].[hash:6].[ext]', true)
         }
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader',
+        loader: 'file-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:6].[ext]')
+          name: utils.assetsPath('fonts/[name].[hash:6].[ext]', true)
         }
       }
     ]

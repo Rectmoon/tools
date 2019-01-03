@@ -1,7 +1,7 @@
 if (process.env.NODE_ENV == 'development') require('raw-loader!./index.html')
 
-import '@/styles/reset.styl'
-import '@/styles/home.styl'
+import '@/assets/styles/reset.styl'
+import '@/assets/styles/home.styl'
 import $ from 'jquery'
 import BScroll from 'better-scroll'
 
