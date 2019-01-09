@@ -65,10 +65,8 @@ function initHtmlTemplate(mode) {
       }
     let chunks = ['manifest', f]
     const str = fs.readFileSync(`${entryDir}/${next}`, 'utf-8')
-    ;(str.indexOf('common') > -1 || str.indexOf('components') > -1) &&
-      chunks.unshift('common')
-    ;/(reset|common|base)\.(s?css|sass|styl|less)/.test(str) &&
-      chunks.unshift('styles')
+    ;(str.indexOf('common') > -1 || str.indexOf('components') > -1) && chunks.unshift('common')
+    ;/(reset|common|base)\.(s?css|sass|styl|less)/.test(str) && chunks.unshift('styles')
 
     if (!useExternals && !useDll) {
       Object.keys(extractEntries).forEach(key => {
@@ -85,9 +83,7 @@ function initHtmlTemplate(mode) {
       favicon: resolve('public/favor.png'),
       minify: false
     }
-    const entryTpl = entryFiles.filter(
-      n => /\.(pug|html)$/.test(n) && getFileName(n) == f
-    )
+    const entryTpl = entryFiles.filter(n => /\.(pug|html)$/.test(n) && getFileName(n) == f)
 
     tpl = entryTpl.length
       ? { ...h, template: `${entryDir}/${entryTpl[0]}` }
@@ -98,8 +94,7 @@ function initHtmlTemplate(mode) {
 }
 
 function assetsPath(_path) {
-  const assetsSubDirectory =
-    process.env.NODE_ENV === 'production' ? './' : 'static'
+  const assetsSubDirectory = process.env.NODE_ENV === 'production' ? './' : 'static'
   return path.posix.join(assetsSubDirectory, _path)
 }
 

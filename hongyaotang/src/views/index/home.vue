@@ -1,15 +1,29 @@
 <template>
   <Page title="首页">
-    <div slot="content">111</div>
+    <div slot="content">
+      <h2>tabs</h2>
+      <tabs :value="selectedIndex" @change="handleChangeTab" class="ignore">
+        <tab v-for="(tab, i) in arr" :index="i" :label="tab" :key="i">{{tab}}1</tab>
+      </tabs>
+    </div>
   </Page>
 </template>
  
 <script>
-import Page from '@/components/page/page.vue'
+import Page from '@/components/base/page'
+import { Tabs, Tab } from '@/components/base/tabs'
 import { getData1, postData1 } from '@/api/home'
 export default {
   components: {
-    Page
+    Page,
+    Tabs,
+    Tab
+  },
+  data() {
+    return {
+      selectedIndex: 0,
+      arr: ['all', 'active', 'completed']
+    }
   },
   mounted() {
     this.getData()
@@ -24,6 +38,9 @@ export default {
           console.log(res)
         })
       }, 300)
+    },
+    handleChangeTab(i) {
+      this.selectedIndex = i
     }
   }
 }
@@ -44,4 +61,8 @@ html, body
   height 100%
   display flex
   background yellow
+
+.ignore
+  *
+    font-size 16px
 </style>
