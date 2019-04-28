@@ -1,14 +1,16 @@
 const path = require('path')
-const ROOT = path.resolve(__dirname, '../')
+const ROOT = path.resolve(__dirname, './')
 const ENV = process.env.NODE_ENV
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const isDev = ENV === 'development'
 
 module.exports = {
   mode: ENV || 'production',
-  devtool: ENV === 'development' ? 'source-map' : undefined,
+  devtool: isDev ? 'source-map' : undefined,
   context: ROOT,
   entry: `${ROOT}/src/index.js`,
   output: {
@@ -23,33 +25,15 @@ module.exports = {
       'create-react-class': 'anujs/lib/createClass',
       '@reach/router': `${ROOT}/patches/Router`,
       redux: `${ROOT}/patches/redux`,
-      '@rematch/core': 'anujs/dist/Rematch',
-      antd: `${ROOT}/patches/antd`
+      '@rematch/core': 'anujs/dist/Rematch'
+      // antd: `${ROOT}/patches/antd`
     }
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  loose: true,
-                  modules: 'commonjs'
-                }
-              ],
-              ['@babel/preset-react', { loose: true }]
-            ],
-            plugins: [
-              ['@babel/plugin-proposal-class-properties', { loose: true }],
-              ['@babel/plugin-syntax-dynamic-import']
-            ]
-          }
-        }
+        use: ['babel-loader']
       },
       {
         test: /\.css$/,
@@ -76,9 +60,16 @@ module.exports = {
     ]
   },
   plugins: [
+    ENV === 'production' &&
+      new CleanWebpackPlugin(['dist'], {
+        root: ROOT,
+        verbose: true,
+        dry: false
+      }),
+
     new DllReferencePlugin({
       context: ROOT,
-      manifest: require(`${ROOT}/src/base.manifest.json`)
+      manifest: path.resolve(__dirname, 'src/base.manifest.json')
     }),
     new HtmlWebpackPlugin({
       template: `${ROOT}/src/index.html`
@@ -103,6 +94,6 @@ module.exports = {
     )
   ],
   devServer: {
-    contentBase: `${ROOT}/dist`
+    contentBase: isDev ? undefined : `${ROOT}/dist`
   }
 }
