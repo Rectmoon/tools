@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --progress --config build/webpack.dev.config.js",
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "lint": "eslint --ext .js, src",
     "build": "cross-env NODE_ENV=production node build/build.js"
   },
