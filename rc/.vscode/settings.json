@@ -1,0 +1,17 @@
+{
+  "prettier.printWidth": 100,
+  "editor.tabSize": 2,
+  "prettier.tabWidth": 2,
+
+  "liveServer.settings.proxy": {
+    "enable": true,
+    "baseUri": "/api",
+    "proxyUri": "http://abc.com"
+  },
+
+  "liveServer.settings.root": "/dist",
+
+  "[javascript]": {
+    "editor.formatOnSave": true
+  }
+}
