@@ -1,12 +1,15 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import React from 'react'
 
 export default class App extends React.Component {
-  constructor(...props) {
+  constructor(props) {
     super(props)
   }
 
   render() {
-    return <h1>hello1234</h1>
+    return (
+      <div>
+        <h1>hello1234</h1>
+      </div>
+    )
   }
 }

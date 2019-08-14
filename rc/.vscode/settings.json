@@ -11,6 +11,8 @@
 
   "liveServer.settings.root": "/dist",
 
+  "liveServer.settings.fullReload": true,
+
   "[javascript]": {
     "editor.formatOnSave": true
   }

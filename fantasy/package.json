@@ -1,0 +1,42 @@
+{
+  "name": "fantasy",
+  "version": "1.0.0",
+  "description": "rollup build tool",
+  "main": "dist/fantasy.umd.js",
+  "module": "dist/fantasy.esm.js",
+  "scripts": {
+    "clean": "rimraf lib dist es",
+    "build:es": "babel src --out-dir es",
+    "prepare": "npm run clean && npm run build",
+    "dev": "cross-env NODE_ENV=development rollup -c",
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
+    "build:umd": "cross-env NODE_ENV=development rollup -c build/rollup.config.js -o dist/fantasy.js",
+    "build:umd:min": "cross-env NODE_ENV=production rollup -c build/rollup.config.js -o dist/fantasy.min.js",
+    "build": "npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
+    "format": "prettier --write \"{src,test}/**/*.{js,ts}\" index.d.ts \"docs/**/*.md\"",
+    "jq": "cross-env NODE_ENV=development rollup -c build/rollup.config.jq.js"
+  },
+  "keywords": [],
+  "author": "Rectmoon",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/plugin-transform-modules-commonjs": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "cross-env": "^5.2.0",
+    "prettier": "^1.18.2",
+    "rimraf": "^2.7.0",
+    "rollup": "^1.19.4",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.0.2",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-terser": "^5.1.1"
+  },
+  "peerDependencies": {
+    "jquery": "^3.2.1"
+  }
+}
