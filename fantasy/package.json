@@ -38,5 +38,8 @@
   },
   "peerDependencies": {
     "jquery": "^3.2.1"
+  },
+  "dependencies": {
+    "@babel/runtime-corejs3": "^7.5.5"
   }
 }
