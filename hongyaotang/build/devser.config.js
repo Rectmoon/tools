@@ -1,5 +1,7 @@
 const path = require('path')
 const axios = require('axios')
+const { entryJs } = require('./utils')
+
 const apiList = [
   {
     path: '/api/getDiscList',
@@ -58,12 +60,20 @@ module.exports = {
   },
   publicPath: '/',
   historyApiFallback: {
-    rewrites: [
-      {
-        from: /.*/,
-        to: path.posix.join('/', 'index.html')
-      }
-    ]
+    rewrites: entryJs
+      .map(entry => {
+        const route = entry.split('.')[0]
+        return {
+          from: new RegExp(`^/${route}$`),
+          to: `/${route}.html`
+        }
+      })
+      .concat([
+        {
+          from: /.*/,
+          to: path.posix.join('/', 'index.html')
+        }
+      ])
   },
   clientLogLevel: 'warning'
 }

@@ -1,8 +1,8 @@
 {
-  "presets": [["@babel/preset-env", { "modules": false }]],
+  "presets": [["@babel/env", { "modules": false }]],
   "plugins": [
     [
-      "@babel/plugin-transform-runtime",
+      "@babel/transform-runtime",
       {
         "corejs": false,
         "helpers": true,
@@ -10,7 +10,7 @@
         "useESModules": false
       }
     ],
-    "@babel/plugin-syntax-dynamic-import",
+    "@babel/syntax-dynamic-import",
     "transform-vue-jsx"
   ]
 }

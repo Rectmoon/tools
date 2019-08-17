@@ -1,6 +1,11 @@
 module.exports = {
   plugins: {
     'postcss-preset-env': {
+      browsers: ['last 5 version', 'Android >= 4.0'],
+      //是否美化属性值 默认：true
+      cascade: true,
+      //是否去掉不必要的前缀 默认：true
+      remove: true,
       stage: 3,
       features: {
         'color-mod-function': { unresolved: 'warn' }
@@ -16,13 +21,6 @@ module.exports = {
       unitPrecision: 5,
       propWhiteList: [],
       selectorBlackList: [/header$/, /footer$/, '.ignore', '.vux-', '.weui-', '.mt-', '.mint-']
-    },
-    autoprefixer: {
-      browsers: ['last 5 version', 'Android >= 4.0'],
-      //是否美化属性值 默认：true
-      cascade: true,
-      //是否去掉不必要的前缀 默认：true
-      remove: true
     }
   }
 }

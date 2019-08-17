@@ -143,5 +143,6 @@ module.exports = {
   initConfig,
   assetsPath,
   includeAssets,
-  createNotifierCallback
+  createNotifierCallback,
+  entryJs
 }

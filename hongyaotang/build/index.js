@@ -156,7 +156,6 @@ module.exports = function(mode) {
             sourceMap: true,
             uglifyOptions: {
               compress: {
-                warnings: false,
                 drop_debugger: false,
                 drop_console: false
               }
