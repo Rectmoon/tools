@@ -2,7 +2,7 @@
   "presets": [["@babel/env", { "modules": false, "useBuiltIns": "usage", "corejs": 3 }]],
   "plugins": [
     /** 
-    开发第三方库时请使用此plugin, 否则最终输出的文件 不会被polyfill
+    开发第三方库时 才使用此plugin, 否则最终输出的文件 不会被polyfill
         [
           "@babel/transform-runtime",
           {
