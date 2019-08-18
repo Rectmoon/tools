@@ -1,7 +1,8 @@
 doctype  html
 head
   meta(charset='utf-8')
-  title Hello Pug
+  title= htmlWebpackPlugin.options.title
+
 body
   div#app
 
@@ -12,3 +13,7 @@ body
   div.lzx  
   include ../layouts/pug/footer.pug
 
+    - 
+      var list = htmlWebpackPlugin.options.commonJs
+  each item in list
+    script(src= item)

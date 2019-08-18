@@ -8,10 +8,11 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    productionSourceMap: true,
+    productionSourceMap: false,
     productionGzip: false,
     productionGzipExtensions: ['js', 'css'],
-    bundleAnalyzerReport: process.env.npm_config_report
+    bundleAnalyzerReport: process.env.npm_config_report,
+    devtool: '#source-map'
   },
   dev: {
     assetsVersionMode: 'hash',
@@ -22,6 +23,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
-    cssSourceMap: false
+    cssSourceMap: false,
+    devtool: 'cheap-module-eval-source-map'
   }
 }

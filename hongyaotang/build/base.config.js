@@ -1,11 +1,11 @@
-const path = require('path')
 const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const { resolve } = require('./alias')
 const { initConfig } = require('./utils')
 const initRules = require('./rules')
-const { useDll } = require('../ying.config')
+const { assetsSubDirectory } = require('../ying.config')
 
 module.exports = function(mode) {
   const devtool = mode === 'development' ? 'cheap-module-eval-source-map' : '#source-map'
@@ -17,33 +17,15 @@ module.exports = function(mode) {
       'process.env': `${JSON.stringify(mode)}`
     }),
     new VueLoaderPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: resolve('static'),
+        to: assetsSubDirectory,
+        ignore: ['.*', 'dll/**/*.json']
+      }
+    ]),
     ...htmlPlugins
   ]
-
-  if (useDll) {
-    const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
-    const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
-    const CopyWebpackPlugin = require('copy-webpack-plugin')
-
-    plugins = plugins.concat([
-      new DllReferencePlugin({
-        context: __dirname,
-        manifest: require('../temp/vue-manifest.json')
-      }),
-      new HtmlWebpackIncludeAssetsPlugin({
-        assets: ['js/dll.vue_2e3438.js'],
-        append: false
-      }),
-      new CopyWebpackPlugin([
-        {
-          from: resolve('temp/'),
-          to: resolve('dist/js/'),
-          toType: 'dir',
-          ignore: ['*.json']
-        }
-      ])
-    ])
-  }
 
   return {
     mode,

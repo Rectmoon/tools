@@ -5,3 +5,5 @@ export default function s(ms) {
     console.log(1)
   })
 }
+
+export function* foo() {}

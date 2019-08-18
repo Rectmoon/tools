@@ -106,7 +106,8 @@ exports.getEntries = function() {
 
 exports.getHtmlPlugins = function() {
   return exports.getPages().map(p => {
-    const chunks = isProd ? ['manifest', 'vendor', p[0]] : [p[0]]
+    const chunks = isProd ? [
+    'manifest', p[0]] : [p[0]]
     return new HtmlWebpackPlugin({
       template: p[1],
       filename: isProd

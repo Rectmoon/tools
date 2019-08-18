@@ -1,24 +1,16 @@
 const webpack = require('webpack')
 const webpackMerge = require('webpack-merge')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-
-const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin').default
-
 const {
   useExternals,
   useDll,
   extractEntries,
   analyze,
   useGzip,
-  makeZip,
-  assetsToInclude
+  makeZip
 } = require('../ying.config')
+
 const { resolve } = require('./alias')
-const { includeAssets, createNotifierCallback } = require('./utils')
+const { assetsPath, createNotifierCallback } = require('./utils')
 const externals = require('./externals')
 const webpackBaseFn = require('./base.config')
 const devServer = require('./devser.config')
@@ -27,6 +19,8 @@ module.exports = function(mode) {
   const baseConfig = webpackBaseFn(mode)
   let destiny, plugins
   if (mode === 'development') {
+    const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+
     plugins = [
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NamedModulesPlugin(),
@@ -49,6 +43,12 @@ module.exports = function(mode) {
       plugins
     }
   } else {
+    const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+    const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+    const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+    const CleanWebpackPlugin = require('clean-webpack-plugin')
+    const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin').default
+
     plugins = [
       new CleanWebpackPlugin(['dist'], {
         root: resolve(''),
@@ -56,11 +56,10 @@ module.exports = function(mode) {
         dry: false
       }),
       new MiniCssExtractPlugin({
-        filename: 'css/[name].[chunkhash:6].css',
-        chunkFilename: 'css/[id].[chunkhash:6].css'
+        filename: assetsPath('css/[name].[chunkhash:6].css'),
+        chunkFilename: assetsPath('css/[id].[chunkhash:6].css')
       }),
-      new WebpackDeepScopeAnalysisPlugin(),
-      ...includeAssets(assetsToInclude, {})
+      new WebpackDeepScopeAnalysisPlugin()
     ]
 
     if (analyze) {
@@ -125,6 +124,22 @@ module.exports = function(mode) {
       plugins.push(new ZipPlugin(option))
     }
 
+    if (useDll) {
+      const DllReferencePlugin = require('webpack/lib/DllReferencePlugin')
+
+      plugins.push(
+        new DllReferencePlugin({
+          context: __dirname,
+          manifest: require('../static/js/dll/vue-manifest.json')
+        })
+      )
+    }
+
+    const commonOptions = {
+      chunks: 'all',
+      reuseExistingChunk: true
+    }
+
     destiny = {
       optimization: {
         runtimeChunk: {
@@ -132,28 +147,32 @@ module.exports = function(mode) {
         },
         splitChunks: {
           cacheGroups: {
-            default: false,
+            polyfill: {
+              test: /[\\/]node_modules[\\/](core-js|raf|@babel|babel)[\\/]/,
+              name: 'polyfill',
+              priority: 30,
+              ...commonOptions
+            },
             common: {
               test: /[\\/]src[\\/](common|components)[\\/]/,
               minChunks: 2,
               minSize: 2,
-              chunks: 'initial',
               name: 'common',
               priority: 10,
               enforce: true,
-              reuseExistingChunk: true
+              ...commonOptions
             },
             styles: {
               name: 'styles',
               test: /(reset|common|base)\.(s?css|sass|styl|less)/,
-              chunks: 'initial',
-              enforce: true
+              enforce: true,
+              ...commonOptions
             }
           }
         },
         minimizer: [
           new UglifyJsPlugin({
-            sourceMap: true,
+            sourceMap: false,
             uglifyOptions: {
               compress: {
                 drop_debugger: false,
@@ -182,14 +201,15 @@ module.exports = function(mode) {
 
     if (useExternals) {
       destiny.externals = externals
-      destiny.plugins = destiny.plugins.concat(includeAssets([], externals))
     } else if (!useDll) {
       Object.keys(extractEntries).forEach(name => {
         let reg = extractEntries[name].join('|')
         destiny.optimization.splitChunks.cacheGroups[name] = {
           test: new RegExp(`${reg}`),
           name,
-          chunks: 'initial'
+          priority: 20,
+          chunks: 'initial',
+          minChunks: 1
         }
       })
     }

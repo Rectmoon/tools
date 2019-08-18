@@ -2,11 +2,18 @@ const fs = require('fs')
 const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 
 const { alias, resolve } = require('./alias')
 const library = require('./library')
-const { useExternals, useDll, extractEntries } = require('../ying.config')
+const {
+  useExternals,
+  useDll,
+  extractEntries,
+  publicPath,
+  commonCss,
+  assetsSubDirectory
+} = require('../ying.config')
+
 const packageConfig = require('../package.json')
 
 function getFiles(dir) {
@@ -22,11 +29,18 @@ function getFileName(s) {
 }
 
 const entryDir = resolve('src/entries')
+const libsDir = resolve('src/libs')
 const outputDir = resolve('dist')
 const entryFiles = getFiles(entryDir)
+const libsJs = getFiles(`${libsDir}/`)
 const entryJs = entryFiles.filter(f => /\.js$/.test(f))
 
 const defaultTemplatePath = resolve('public/index.html')
+
+function assetsPath(_path) {
+  const assetsSD = process.env.NODE_ENV === 'production' ? assetsSubDirectory : 'static'
+  return path.posix.join(assetsSD, _path)
+}
 
 function initEntryAndOutput(mode) {
   const result = entryJs.reduce(
@@ -44,16 +58,37 @@ function initEntryAndOutput(mode) {
   }
   result.output = {
     path: outputDir,
-    filename: 'js/[name].js'
+    filename: assetsPath('js/[name].js'),
+    publicPath
   }
   if (mode !== 'development') {
-    result.output.filename = 'js/[name].[chunkhash:6].js'
-    result.output.chunkFilename = 'js/[id].[chunkhash:6].js'
+    result.output.filename = assetsPath('js/[name].[chunkhash:6].js')
+    // result.output.chunkFilename = assetsPath('js/[id].[chunkhash:6].js')
   }
   return result
 }
 
 function initHtmlTemplate(mode) {
+  let commonJs = []
+  if (libsJs.length) {
+    commonJs = commonJs.concat(
+      libsJs.map(j => `${path.posix.join(publicPath, assetsPath('js/libs'))}/${j}`)
+    )
+  }
+  if (useExternals) {
+    const externals = require('./externals')
+    Object.keys(externals).forEach(lib => {
+      if (library[lib]) {
+        commonJs = commonJs.concat(library[lib])
+      }
+    })
+  } else if (useDll) {
+    const dllJs = getFiles(resolve('static/js/dll')).filter(f => /\.js$/.test(f))
+    commonJs = commonJs.concat(
+      dllJs.map(j => `${path.posix.join(publicPath, assetsPath('js/dll'))}/${j}`)
+    )
+  }
+
   return entryJs.reduce((res, next) => {
     let tpl
     const f = getFileName(next)
@@ -63,16 +98,10 @@ function initHtmlTemplate(mode) {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       }
-    let chunks = ['manifest', f]
-    const str = fs.readFileSync(`${entryDir}/${next}`, 'utf-8')
-    ;(str.indexOf('common') > -1 || str.indexOf('components') > -1) && chunks.unshift('common')
-    ;/(reset|common|base)\.(s?css|sass|styl|less)/.test(str) && chunks.unshift('styles')
-
+    let chunks = ['manifest', 'polyfill', 'styles', 'common', f]
     if (!useExternals && !useDll) {
       Object.keys(extractEntries).forEach(key => {
-        if (extractEntries[key].some(k => str.indexOf(k) > -1)) {
-          chunks.unshift(key)
-        }
+        chunks.unshift(key)
       })
     }
 
@@ -80,9 +109,12 @@ function initHtmlTemplate(mode) {
       filename: `${f}.html`,
       chunks,
       title,
+      commonJs,
+      commonCss,
       favicon: resolve('public/favor.png'),
       minify: false
     }
+
     const entryTpl = entryFiles.filter(n => /\.(pug|html)$/.test(n) && getFileName(n) == f)
 
     tpl = entryTpl.length
@@ -91,29 +123,6 @@ function initHtmlTemplate(mode) {
     res.push(new HtmlWebpackPlugin(tpl))
     return res
   }, [])
-}
-
-function assetsPath(_path) {
-  const assetsSubDirectory = process.env.NODE_ENV === 'production' ? './' : 'static'
-  return path.posix.join(assetsSubDirectory, _path)
-}
-
-function includeAssets(extraCdn = [], externals = {}) {
-  return entryJs.map(n => {
-    let cdnPaths = []
-    Object.keys(externals).forEach(lib => {
-      const str = fs.readFileSync(`${entryDir}/${n}`, 'utf-8')
-      if (library[lib] && str.indexOf(lib) > -1) {
-        cdnPaths.push(library[lib])
-      }
-    })
-    return new HtmlWebpackIncludeAssetsPlugin({
-      files: `${getFileName(n)}.html`,
-      assets: extraCdn.concat(cdnPaths),
-      append: false,
-      publicPath: ''
-    })
-  })
 }
 
 function initConfig(mode) {
@@ -139,10 +148,18 @@ function createNotifierCallback() {
   }
 }
 
+function getLibEntries() {
+  return libsJs.reduce((res, next) => {
+    const n = next.substring(next.lastIndexOf('/') + 1, next.lastIndexOf('.'))
+    res[n] = resolve(`${libsDir}/${next}`)
+    return res
+  }, {})
+}
+
 module.exports = {
   initConfig,
   assetsPath,
-  includeAssets,
   createNotifierCallback,
-  entryJs
+  entryJs,
+  getLibEntries
 }

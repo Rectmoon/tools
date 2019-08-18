@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title><%= htmlWebpackPlugin.options.title %></title>
+
+  <% var css = htmlWebpackPlugin.options.commonCss; for(var i = 0; i < css.length; i++){ %>
+  <link rel='stylesheet' linl="<%= css[i] %>" />
+  <% } %>
+
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <% var js = htmlWebpackPlugin.options.commonJs; for(var i = 0; i < js.length; i++){ %>
+  <script type="text/javascript" src="<%= js[i] %>"></script>
+  <% } %>
+</body>
+
 </html>

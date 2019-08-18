@@ -1,22 +1,19 @@
 module.exports = {
-  useExternals: true,
-  useDll: false,
+  useExternals: false, // 如果多页面所用技术栈不一致, 个人觉得使用externals比较合适, 否则多页面都需要引入dll.js会比较麻烦
+  useDll: true,
   extractEntries: {
+    vendor: ['jquery', 'axios'],
     vue: ['vue'],
-    react: ['react', 'react-dom'],
-    vendor: ['jquery', 'axios']
+    react: ['react', 'react-dom']
   },
   analyze: false,
   useGzip: false,
   makeZip: {
     on: false,
-    name: 'reactmoon',
+    name: 'rectmoon',
     sourceMap: false
   },
-  assetsToInclude: [
-    {
-      path: 'https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css',
-      type: 'css'
-    }
-  ]
+  commonCss: ['https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css'],
+  publicPath: '/',
+  assetsSubDirectory: 'static'
 }

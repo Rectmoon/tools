@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>heiheihei</title>
-  </head>
-  <body>
-    <%= require('raw-loader!@/layouts/html/header.html') %>
-    <div class="demo1"></div>
-    <div class="content">How are you1234 ?</div>
-    <div class="content">How are you12 ?</div>
-    <div class="content">How are you14 ?</div>
-    <div class="content main">mai123456n</div>
-    <div class="demo1"></div>
-    <div class="demo2"></div>
-    <h1>hello</h1>
-    <div style="display: flex;">
-      <img src=<%= require('@/assets/images/3.png') %> alt="" style="width:.6rem;height:.6rem;" />
-    </div>
 
-    <%= require('raw-loader!@/layouts/html/footer.html') %>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>heiheihei</title>
+</head>
+
+<body>
+  <%= require('raw-loader!@/layouts/html/header.html') %>
+  <div class="demo1"></div>
+  <div class="content">How are you1234 ?</div>
+  <div class="content">How are you12 ?</div>
+  <div class="content">How are you14 ?</div>
+  <div class="content main">mai123456n</div>
+  <div class="demo1"></div>
+  <div class="demo2"></div>
+  <h1>hello</h1>
+  <div style="display: flex;">
+    <img src=<%= require('@/assets/images/3.png') %> alt="" style="width:.6rem;height:.6rem;" />
+  </div>
+
+  <%= require('raw-loader!@/layouts/html/footer.html') %>
+
+  <% var js = htmlWebpackPlugin.options.commonJs; for(var i = 0; i < js.length; i++){ %>
+  <script type="text/javascript" src="<%= js[i] %>"></script>
+  <% } %>
+</body>
+
 </html>

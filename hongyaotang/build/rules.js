@@ -77,7 +77,7 @@ const imgLoader = {
   test: /\.(gif|jpg|png|woff|svg|eot|ttf)\??.*$/,
   loader: 'url-loader',
   options: {
-    limit: 10000,
+    limit: 1,
     name: assetsPath('images/[name].[hash:6].[ext]')
   }
 }
@@ -106,15 +106,7 @@ const eslintLoader = {
 
 const pugTplLoader = {
   test: /\.pug$/,
-  use: ['raw-loader', 'pug-html-loader'],
-  include: [resolve('src/entries')],
-  exclude: [/static/]
-}
-
-const pugLoader = {
-  test: /\.pug$/,
-  loader: 'pug-html-loader',
-  exclude: /entries/
+  loader: 'pug-loader'
 }
 
 module.exports = function(mode) {
@@ -124,13 +116,13 @@ module.exports = function(mode) {
       style.use.splice(0, 1, {
         loader: MiniCssExtractPlugin.loader,
         options: {
-          publicPath: '../'
+          publicPath: '/'
         }
       })
     })
   } else {
     loaders.push(eslintLoader)
   }
-  loaders.push(vueLoader, jsLoader, videoLoader, imgLoader, fontLoader, pugTplLoader, pugLoader)
+  loaders.push(vueLoader, jsLoader, videoLoader, imgLoader, fontLoader, pugTplLoader)
   return loaders.concat(freeStyle)
 }

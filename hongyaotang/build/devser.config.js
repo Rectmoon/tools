@@ -52,7 +52,7 @@ module.exports = {
   compress: true,
   host: process.env.HOST || 'localhost',
   port: (process.env.PORT && Number(process.env.PORT)) || 9000,
-  open: true,
+  open: false,
   overlay: { warnings: false, errors: true },
   quiet: true,
   watchOptions: {

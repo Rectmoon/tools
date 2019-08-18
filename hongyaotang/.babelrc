@@ -1,15 +1,17 @@
 {
-  "presets": [["@babel/env", { "modules": false }]],
+  "presets": [["@babel/env", { "modules": false, "useBuiltIns": "usage", "corejs": 3 }]],
   "plugins": [
-    [
-      "@babel/transform-runtime",
-      {
-        "corejs": false,
-        "helpers": true,
-        "regenerator": true,
-        "useESModules": false
-      }
-    ],
+    /** 
+    开发第三方库时请使用此plugin, 否则最终输出的文件 不会被polyfill
+        [
+          "@babel/transform-runtime",
+          {
+            "corejs": 3,
+            "helpers": true,
+            "useESModules": false
+          } 
+        ],
+    */
     "@babel/syntax-dynamic-import",
     "transform-vue-jsx"
   ]

@@ -13,7 +13,11 @@ const alias = {
   assets: resolve('src/assets')
 }
 
-if (!useDll) alias['vue$'] = 'vue/dist/vue.esm.js'
+if (
+  !useDll
+  // || process.env.NODE_ENV === 'development'
+)
+  alias['vue$'] = 'vue/dist/vue.esm.js'
 
 module.exports = {
   alias,

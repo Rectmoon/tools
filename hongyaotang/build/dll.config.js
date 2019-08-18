@@ -5,20 +5,20 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 module.exports = {
   mode: 'production',
   entry: {
-    vue: ['vue']
+    vue: ['vue', 'vue-router']
   },
   output: {
     filename: 'dll.[name]_[hash:6].js',
-    path: resolve('temp'),
+    path: resolve('static/js/dll'),
     library: '[name]_[hash:6]'
   },
   plugins: [
     new DllPlugin({
       name: '[name]_[hash:6]',
-      path: resolve('temp/[name]-manifest.json'),
+      path: resolve('static/js/dll/[name]-manifest.json'),
       context: __dirname
     }),
-    new CleanWebpackPlugin(['temp'], {
+    new CleanWebpackPlugin(['static/js/dll'], {
       root: resolve(''),
       verbose: true,
       dry: false

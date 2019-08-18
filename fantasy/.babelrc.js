@@ -7,7 +7,8 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        loose
+        loose,
+        modules: false
         /**
          * 设置loose为true 的优点在于兼容旧引擎，可能会更加快，而且编译后的代码更加像是人手写的
          * 缺点在于如果我们需要将转换之后的代码重新转换为 native ES6 代码，可能会遇到问题
@@ -88,7 +89,6 @@ module.exports = {
       '@babel/transform-runtime',
       {
         helpers: true,
-        regenerator: true,
         useESModules: !cjs,
         corejs: 3 // corejs: { version: 3, proposals: true }
         /** false => @babel/runtime
