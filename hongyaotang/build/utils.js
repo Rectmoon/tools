@@ -32,7 +32,7 @@ const entryDir = resolve('src/entries')
 const libsDir = resolve('src/libs')
 const outputDir = resolve('dist')
 const entryFiles = getFiles(entryDir)
-const libsJs = getFiles(`${libsDir}/`)
+const libsJs = getFiles(resolve('static/js/libs')).filter(j => path.extname(j) === '.js')
 const entryJs = entryFiles.filter(f => /\.js$/.test(f))
 
 const defaultTemplatePath = resolve('public/index.html')
@@ -63,7 +63,7 @@ function initEntryAndOutput(mode) {
   }
   if (mode !== 'development') {
     result.output.filename = assetsPath('js/[name].[chunkhash:6].js')
-    // result.output.chunkFilename = assetsPath('js/[id].[chunkhash:6].js')
+    result.output.chunkFilename = assetsPath('js/[id].[chunkhash:6].js')
   }
   return result
 }
