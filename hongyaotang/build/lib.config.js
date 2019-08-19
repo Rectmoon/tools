@@ -20,7 +20,22 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: ['babel-loader']
+        use: {
+          loader: 'babel-loader'
+          // ,options: {
+          //   babelrc: false,
+          //   presets: ['@babel/preset-env'],
+          //   plugins: [
+          //     [
+          //       '@babel/transform-runtime',
+          //       {
+          //         helpers: true,
+          //         corejs: 3
+          //       }
+          //     ]
+          //   ]
+          // }
+        }
       }
     ]
   },

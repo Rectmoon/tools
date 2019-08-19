@@ -21,7 +21,7 @@ module.exports = function(mode) {
       {
         from: resolve('static'),
         to: assetsSubDirectory,
-        ignore: ['.*', 'dll/**/*.json']
+        ignore: ['.*', '**/*-manifest.json']
       }
     ]),
     ...htmlPlugins

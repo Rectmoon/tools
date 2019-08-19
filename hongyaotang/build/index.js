@@ -6,7 +6,8 @@ const {
   extractEntries,
   analyze,
   useGzip,
-  makeZip
+  makeZip,
+  useSourceMap
 } = require('../ying.config')
 
 const { resolve } = require('./alias')
@@ -172,7 +173,7 @@ module.exports = function(mode) {
         },
         minimizer: [
           new UglifyJsPlugin({
-            sourceMap: false,
+            sourceMap: useSourceMap,
             uglifyOptions: {
               compress: {
                 drop_debugger: false,
