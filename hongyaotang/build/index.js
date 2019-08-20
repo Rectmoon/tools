@@ -57,8 +57,8 @@ module.exports = function(mode) {
         dry: false
       }),
       new MiniCssExtractPlugin({
-        filename: assetsPath('css/[name].[chunkhash:6].css'),
-        chunkFilename: assetsPath('css/[id].[chunkhash:6].css')
+        filename: assetsPath('css/[name].[contenthash:6].css'),
+        chunkFilename: assetsPath('css/[id].[contenthash:6].css')
       }),
       new WebpackDeepScopeAnalysisPlugin()
     ]
