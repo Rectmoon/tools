@@ -2,13 +2,12 @@ const path = require('path')
 const express = require('express')
 const app = express()
 
-const staticPath = process.env.static || 'dist'
 const port = process.env.port || 3000
 
 app.use('/dist', express.static(path.join(__dirname, 'dist'), { maxAge: '3d' }))
 
 app.get('/dist/:path', (req, res) => {
-  res.sendfile(staticPath + `/${req.params.path}.html`, { maxAge: '0' })
+  res.sendFile(__dirname + `/dist/${req.params.path}.html`, { maxAge: '0' })
 })
 
 app.listen(port, () => {

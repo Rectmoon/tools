@@ -143,11 +143,14 @@ module.exports = function(mode) {
 
     destiny = {
       optimization: {
+        moduleIds: 'hashed',
         runtimeChunk: {
           name: 'manifest'
         },
         splitChunks: {
           cacheGroups: {
+            default: false,
+            vendors: false,
             polyfill: {
               test: /[\\/]node_modules[\\/](core-js|raf|@babel|babel)[\\/]/,
               name: 'polyfill',
