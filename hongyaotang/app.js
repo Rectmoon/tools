@@ -5,10 +5,10 @@ const app = express()
 const staticPath = process.env.static || 'dist'
 const port = process.env.port || 3000
 
-app.use(express.static(path.join(__dirname, staticPath), { maxAge: '3d' }))
+app.use('/dist', express.static(path.join(__dirname, 'dist'), { maxAge: '3d' }))
 
-app.use('/**', function(req, res) {
-  res.sendfile(staticPath + '/index.html', { maxAge: 0 })
+app.get('/dist/:path', (req, res) => {
+  res.sendfile(staticPath + `/${req.params.path}.html`, { maxAge: '0' })
 })
 
 app.listen(port, () => {

@@ -15,6 +15,6 @@ module.exports = {
     sourceMap: false
   },
   commonCss: ['https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css'],
-  publicPath: '/',
+  publicPath: '/dist/',
   assetsSubDirectory: 'static'
 }
