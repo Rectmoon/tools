@@ -1,5 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
+const { publicPath } = require('../ying.config')
 const { resolve } = require('./alias')
 const { assetsPath } = require('./utils')
 const vueLoader = {
@@ -115,9 +115,7 @@ module.exports = function(mode) {
     freeStyle.forEach(style => {
       style.use.splice(0, 1, {
         loader: MiniCssExtractPlugin.loader,
-        options: {
-          publicPath: '/'
-        }
+        options: { publicPath }
       })
     })
   } else {
