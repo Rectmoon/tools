@@ -3,11 +3,14 @@ const express = require('express')
 const app = express()
 
 const port = process.env.port || 3000
+const { outputDir } = require('./ying.config')
+const webDirName = path.relative(__dirname, outputDir)
+console.log(webDirName)
 
-app.use('/dist', express.static(path.join(__dirname, 'dist'), { maxAge: '3d' }))
+app.use(`/${webDirName}`, express.static(path.join(__dirname, webDirName), { maxAge: '3d' }))
 
-app.get('/dist/:path', (req, res) => {
-  res.sendFile(__dirname + `/dist/${req.params.path}.html`, { maxAge: '0' })
+app.get(`/${webDirName}/:path`, (req, res) => {
+  res.sendFile(__dirname + `/${webDirName}/${req.params.path}.html`, { maxAge: '0' })
 })
 
 app.listen(port, () => {

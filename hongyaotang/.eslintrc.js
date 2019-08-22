@@ -37,6 +37,7 @@ module.exports = {
     'no-console': 0,
     'no-debugger': 1,
     'no-unused-vars': 0,
+    'no-undef': 0,
     'no-mixed-spaces-and-tabs': 2,
     quotes: [2, 'single', 'avoid-escape'],
     semi: 0,

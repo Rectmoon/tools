@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   useExternals: true,
   useDll: false,
@@ -15,6 +17,7 @@ module.exports = {
     sourceMap: false
   },
   commonCss: ['https://cdn.bootcss.com/animate.css/3.7.0/animate.min.css'],
-  publicPath: '/dist/',
+  outputDir: path.resolve(__dirname, 'web'),
+  publicPath: '/web/',
   assetsSubDirectory: 'static'
 }

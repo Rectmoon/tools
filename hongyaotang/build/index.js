@@ -7,6 +7,7 @@ const {
   analyze,
   useGzip,
   makeZip,
+  outputDir,
   useSourceMap
 } = require('../ying.config')
 
@@ -51,7 +52,7 @@ module.exports = function(mode) {
     const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin').default
 
     plugins = [
-      new CleanWebpackPlugin(['dist'], {
+      new CleanWebpackPlugin([outputDir], {
         root: resolve(''),
         verbose: true,
         dry: false

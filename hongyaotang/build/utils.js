@@ -9,8 +9,9 @@ const {
   useExternals,
   useDll,
   extractEntries,
-  publicPath,
   commonCss,
+  outputDir,
+  publicPath,
   assetsSubDirectory
 } = require('../ying.config')
 
@@ -30,7 +31,6 @@ function getFileName(s) {
 
 const entryDir = resolve('src/entries')
 const libsDir = resolve('src/libs')
-const outputDir = resolve('dist')
 const entryFiles = getFiles(entryDir)
 const libsJs = getFiles(resolve('static/js/libs')).filter(j => path.extname(j) === '.js')
 const entryJs = entryFiles.filter(f => /\.js$/.test(f))
@@ -63,7 +63,7 @@ function initEntryAndOutput(mode) {
   }
   if (mode !== 'development') {
     result.output.filename = assetsPath('js/[name].[contenthash:6].js')
-    result.output.chunkFilename = assetsPath('js/[id].[contenthash:6].js')
+    // result.output.chunkFilename = assetsPath('js/[id].[contenthash:6].js')
     /**
      * hash: 每个压缩后的文件的hash值是一样的, 一旦修改了任何一个文件，整个项目的文件缓存都将失效。
      * chunkhash: 根据不同的入口文件(Entry)进行依赖文件解析、构建对应的chunk, 生成对应的哈希值, 但是抽取出来的文件（如通过MiniCssExtractPlugin提取的css文件）的chunkhash值是一样的。

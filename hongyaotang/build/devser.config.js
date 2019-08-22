@@ -1,6 +1,7 @@
 const path = require('path')
 const axios = require('axios')
 const { entryJs } = require('./utils')
+const { publicPath } = require('../ying.config')
 
 const apiList = [
   {
@@ -58,7 +59,7 @@ module.exports = {
   watchOptions: {
     poll: false
   },
-  publicPath: '/',
+  publicPath,
   historyApiFallback: {
     rewrites: entryJs
       .map(entry => {

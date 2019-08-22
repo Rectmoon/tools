@@ -11,6 +11,8 @@ Promise.resolve(1).then(() => {
   console.log(2)
 })
 
+console.log(EventBus)
+
 new Vue({
   router,
   render: h => h(App)
