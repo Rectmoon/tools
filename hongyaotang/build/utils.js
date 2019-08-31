@@ -32,7 +32,7 @@ function getFileName(s) {
 const entryDir = resolve('src/entries')
 const libsDir = resolve('src/libs')
 const entryFiles = getFiles(entryDir)
-const libsJs = getFiles(resolve('static/js/libs')).filter(j => path.extname(j) === '.js')
+const libsJs = getFiles(resolve('src/libs')).filter(j => path.extname(j) === '.js')
 const entryJs = entryFiles.filter(f => /\.js$/.test(f))
 
 const defaultTemplatePath = resolve('public/index.html')
@@ -75,9 +75,10 @@ function initEntryAndOutput(mode) {
 
 function initHtmlTemplate(mode) {
   let commonJs = []
-  if (libsJs.length) {
+  let staticLibsJs = getFiles(resolve('static/js/libs')).filter(j => path.extname(j) === '.js')
+  if (staticLibsJs.length) {
     commonJs = commonJs.concat(
-      libsJs.map(j => `${path.posix.join(publicPath, assetsPath('js/libs'))}/${j}`)
+      staticLibsJs.map(j => `${path.posix.join(publicPath, assetsPath('js/libs'))}/${j}`)
     )
   }
   if (useExternals) {

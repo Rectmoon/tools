@@ -17,7 +17,6 @@ const apiList = [
 const data1 = require('../src/mock/data.json')
 
 module.exports = {
-  proxy: {},
   before(app) {
     apiList.forEach(api => {
       app.get(api.path, (req, res) => {
@@ -50,6 +49,7 @@ module.exports = {
   after(app) {},
   hot: true,
   contentBase: false,
+  headers: {},
   compress: true,
   host: process.env.HOST || 'localhost',
   port: (process.env.PORT && Number(process.env.PORT)) || 9000,
@@ -61,18 +61,23 @@ module.exports = {
   },
   publicPath,
   historyApiFallback: {
+    /**
+     * @example
+     * /web/index => /web/index.html
+     * /web/main => /web/main.html
+     */
     rewrites: entryJs
       .map(entry => {
-        const route = entry.split('.')[0]
+        const route = publicPath + entry.split('.')[0]
         return {
-          from: new RegExp(`^/${route}$`),
-          to: `/${route}.html`
+          from: new RegExp(`^${route}$`),
+          to: `${route}.html`
         }
       })
       .concat([
         {
           from: /.*/,
-          to: path.posix.join('/', 'index.html')
+          to: path.posix.join(publicPath, 'index.html')
         }
       ])
   },

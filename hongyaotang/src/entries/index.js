@@ -12,6 +12,7 @@ Promise.resolve(1).then(() => {
 })
 
 console.log(EventBus)
+console.log(EventHandler)
 
 new Vue({
   router,

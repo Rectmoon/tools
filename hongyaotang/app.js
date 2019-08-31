@@ -5,7 +5,6 @@ const app = express()
 const port = process.env.port || 3000
 const { outputDir } = require('./ying.config')
 const webDirName = path.relative(__dirname, outputDir)
-console.log(webDirName)
 
 app.use(`/${webDirName}`, express.static(path.join(__dirname, webDirName), { maxAge: '3d' }))
 
@@ -14,7 +13,7 @@ app.get(`/${webDirName}/:path`, (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`app is listening at port ${port}`)
+  console.log(`Application is listening at http://localhost:${port}`)
 })
 
 /**

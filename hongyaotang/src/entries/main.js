@@ -15,7 +15,7 @@ async function main() {
   await sleep(5)
   console.log(10)
 }
-
+console.log(6666)
 console.log(23412315)
 
 main()
