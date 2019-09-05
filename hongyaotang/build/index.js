@@ -48,11 +48,11 @@ module.exports = function(mode) {
     const MiniCssExtractPlugin = require('mini-css-extract-plugin')
     const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
     const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-    const CleanWebpackPlugin = require('clean-webpack-plugin')
+    const { CleanWebpackPlugin } = require('clean-webpack-plugin')
     const WebpackDeepScopeAnalysisPlugin = require('webpack-deep-scope-plugin').default
 
     plugins = [
-      new CleanWebpackPlugin([outputDir], {
+      new CleanWebpackPlugin({
         root: resolve(''),
         verbose: true,
         dry: false

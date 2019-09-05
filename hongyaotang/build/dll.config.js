@@ -1,6 +1,6 @@
-const { resolve } = require('./alias')
 const DllPlugin = require('webpack/lib/DllPlugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const { resolve } = require('./alias')
 
 module.exports = {
   mode: 'production',
@@ -18,8 +18,7 @@ module.exports = {
       path: resolve('static/js/dll/[name]-manifest.json'),
       context: __dirname
     }),
-    new CleanWebpackPlugin(['static/js/dll'], {
-      root: resolve(''),
+    new CleanWebpackPlugin({
       verbose: true,
       dry: false
     })

@@ -1,4 +1,5 @@
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const webpack = require('webpack')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { getLibEntries } = require('./utils')
 const { resolve } = require('./alias')
 
@@ -6,7 +7,7 @@ module.exports = {
   entry: getLibEntries(),
   output: {
     path: resolve('static/js/libs'),
-    filename: '[name].js',
+    filename: '[name].[hash:6].js',
     library: '[name]', // 暴露出的变量名 (libs中的文件名不要包括"-、."等字符， 文件名最好为驼峰格式)
     libraryTarget: 'umd', //var (默认值，发布为全局变量)、commonjs、commonjs2、amd、umd等
     globalObject: 'this',
@@ -40,10 +41,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['static/js/libs'], {
-      root: resolve(''),
+    new CleanWebpackPlugin({
       verbose: true,
       dry: false
-    })
+    }),
+    new webpack.ProgressPlugin()
   ]
 }

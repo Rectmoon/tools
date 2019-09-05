@@ -16,6 +16,7 @@ module.exports = function(mode) {
     new webpack.DefinePlugin({
       'process.env': `${JSON.stringify(mode)}`
     }),
+    new webpack.ProgressPlugin(),
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([
       {

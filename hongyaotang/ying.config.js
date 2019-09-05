@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-  useExternals: false,
+  useExternals: true,
   useDll: false,
   extractEntries: {
     vue: ['vue']
