@@ -2,8 +2,6 @@ import sleep from './ok'
 
 export default function s(ms) {
   sleep(3).then(res => {
-    console.log(1)
+    console.log(123)
   })
 }
-
-export function* foo() {}
