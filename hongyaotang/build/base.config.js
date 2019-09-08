@@ -8,7 +8,7 @@ const initRules = require('./rules')
 const { assetsSubDirectory } = require('../ying.config')
 
 module.exports = function(mode) {
-  const devtool = mode === 'development' ? 'cheap-module-eval-source-map' : '#source-map'
+  const devtool = mode === 'development' ? 'cheap-module-eval-source-map' : 'source-map'
   const { entry, output, alias, htmlPlugins } = initConfig(mode)
 
   const loaders = initRules(mode)

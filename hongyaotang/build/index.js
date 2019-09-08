@@ -7,7 +7,6 @@ const {
   analyze,
   useGzip,
   makeZip,
-  outputDir,
   useSourceMap
 } = require('../ying.config')
 

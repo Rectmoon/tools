@@ -12,7 +12,7 @@ module.exports = {
     productionGzip: false,
     productionGzipExtensions: ['js', 'css'],
     bundleAnalyzerReport: process.env.npm_config_report,
-    devtool: '#source-map'
+    devtool: 'source-map'
   },
   dev: {
     assetsVersionMode: 'hash',

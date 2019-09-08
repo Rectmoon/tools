@@ -2,12 +2,14 @@ const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { getLibEntries } = require('./utils')
 const { resolve } = require('./alias')
+const { useSourceMap } = require('../ying.config')
+console.log(useSourceMap)
 
 module.exports = {
   entry: getLibEntries(),
   output: {
     path: resolve('static/js/libs'),
-    filename: '[name].[hash:6].js',
+    filename: '[name].[chunkhash:6].js',
     library: '[name]', // 暴露出的变量名 (libs中的文件名不要包括"-、."等字符， 文件名最好为驼峰格式)
     libraryTarget: 'umd', //var (默认值，发布为全局变量)、commonjs、commonjs2、amd、umd等
     globalObject: 'this',
@@ -15,7 +17,7 @@ module.exports = {
     umdNamedDefine: true //(umd规范中输出amd的命名)
   },
   mode: 'production',
-  devtool: '#source-map',
+  devtool: useSourceMap ? 'source-map' : 'none',
   module: {
     rules: [
       {
@@ -42,8 +44,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin({
-      verbose: true,
-      dry: false
+      verbose: true
     }),
     new webpack.ProgressPlugin()
   ]
