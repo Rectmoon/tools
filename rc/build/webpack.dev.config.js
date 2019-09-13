@@ -1,18 +1,18 @@
-const utils = require("./utils")
-const webpack = require("webpack")
-const config = require("../config")
-const merge = require("webpack-merge")
-const path = require("path")
-const baseWebpackConfig = require("./webpack.base.config")
-const CopyWebpackPlugin = require("copy-webpack-plugin")
-const FriendlyErrorsPlugin = require("friendly-errors-webpack-plugin")
-const portfinder = require("portfinder")
+const utils = require('./utils')
+const webpack = require('webpack')
+const config = require('../config')
+const merge = require('webpack-merge')
+const path = require('path')
+const baseWebpackConfig = require('./webpack.base.config')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
 const devWebpackConfig = merge(baseWebpackConfig, {
-  mode: "development",
+  mode: 'development',
 
   module: {
     rules: utils.styleLoaders({
@@ -24,7 +24,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devtool: config.dev.devtool,
 
   devServer: {
-    clientLogLevel: "warning",
+    clientLogLevel: 'warning',
     historyApiFallback: {
       rewrites: utils.getPages().map(p => ({
         from: new RegExp(`^/${p[0]}$`),
@@ -48,7 +48,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": require("../config/dev.env")
+      'process.env': require('../config/dev.env')
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
@@ -58,9 +58,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
 
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, "../static"),
+        from: path.resolve(__dirname, '../static'),
         to: config.dev.assetsSubDirectory,
-        ignore: [".*"]
+        ignore: ['.*']
       }
     ])
 

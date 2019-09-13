@@ -13,14 +13,14 @@ module.exports = {
     library: '[name]_[hash:6]'
   },
   plugins: [
+    new CleanWebpackPlugin({
+      verbose: true,
+      dry: false
+    }),
     new DllPlugin({
       name: '[name]_[hash:6]',
       path: resolve('static/js/dll/[name]-manifest.json'),
       context: __dirname
-    }),
-    new CleanWebpackPlugin({
-      verbose: true,
-      dry: false
     })
   ]
 }

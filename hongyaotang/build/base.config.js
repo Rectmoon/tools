@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { resolve } = require('./alias')
 const { initConfig } = require('./utils')
 const initRules = require('./rules')

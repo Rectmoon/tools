@@ -2,7 +2,7 @@
   <div class="page">
     <header class="header">
       <h1>{{title}}</h1>
-      <img class="back" :src="backIcon" @click="back" alt="back">
+      <img class="back" :src="backIcon" @click="back" alt="back" />
     </header>
     <div class="wrapper">
       <section v-show="desc" class="desc">
@@ -34,6 +34,7 @@ export default {
   },
   data() {
     return {
+      count: 1,
       backIcon: require('assets/images/back.svg')
     }
   },

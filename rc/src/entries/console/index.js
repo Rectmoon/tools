@@ -9,7 +9,8 @@ const __DEV__ = process.env.NODE_ENV === 'development'
 if (__DEV__) {
   if (module.hot) {
     module.hot.accept(['./app'], () => {
-      ReactDOM.render(<App a="1" />, document.getElementById('root'))
+      const NextApp = require('./app').default
+      ReactDOM.render(<NextApp a="1" />, document.getElementById('root'))
     })
   }
 }

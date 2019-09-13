@@ -1,8 +1,8 @@
 const path = require('path')
 
 module.exports = {
-  useExternals: true,
-  useDll: false,
+  useExternals: false,
+  useDll: true,
   extractEntries: {
     vue: ['vue']
     // ,vendor: ['jquery', 'axios'],
