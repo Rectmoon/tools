@@ -1,11 +1,13 @@
-import { hot } from 'react-hot-loader/root'
+import { hot, setConfig } from 'react-hot-loader'
+
 import React, { Component } from 'react'
+
 import Counter from './Counter'
 import Button from './Button'
-
-import styles from './index.css'
+import styles from './index.styl'
 
 console.log(process.env)
+
 const sleep = t => new Promise(resolve => setTimeout(resolve, t * 1000))
 
 class App extends Component {
@@ -17,6 +19,7 @@ class App extends Component {
   }
 
   handleClick = () => {
+    console.log(t)
     console.log(6666789)
     this.setState({
       count: this.state.count + 1
@@ -29,7 +32,6 @@ class App extends Component {
   }
 
   render() {
-    console.log('rendering1')
     return (
       <div>
         <h1>
@@ -42,11 +44,29 @@ class App extends Component {
 
         <div className="flex">我是widget中的样式</div>
 
-        <div className={styles.box}>我是局部的box</div>
+        <div className={styles.box}>
+          我是局部的box
+          <span>我是局部box里的span</span>
+        </div>
         <div className="box">我是全局的box</div>
       </div>
     )
   }
 }
 
-export default hot(App)
+setConfig({
+  ErrorOverlay: e => {
+    return (
+      <div className="error-message">
+        <span style={{ color: '#E36049' }}>Failed to compile.</span>
+        <br />
+        <br />
+        {e.errors.map((item, i) => (
+          <p key={i}>{item.error.message}</p>
+        ))}
+      </div>
+    )
+  }
+})
+
+export default hot(module)(App)
