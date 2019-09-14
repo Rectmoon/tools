@@ -101,7 +101,7 @@ module.exports = {
       {
         from: resolve('static'),
         to: config.assetsSubDirectory,
-        ignore: ['.*', 'dll/**']
+        ignore: ['.*', '*_manifest.json']
       }
     ]),
 

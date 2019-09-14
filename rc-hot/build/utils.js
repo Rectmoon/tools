@@ -1,28 +1,22 @@
 const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
-
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const ENV = process.env.NODE_ENV
 const isProd = ENV === 'production'
-
 const config = require('./config')
 
-exports.resolve = function(dir) {
+function resolve(dir) {
   return path.resolve(__dirname, '..', dir)
 }
 
-const defaultTemplatePath = exports.resolve('index.html')
+const defaultTemplatePath = resolve('index.html')
 
-exports.assetsPath = function(_path) {
-  return path.posix.join(config.assetsSubDirectory, _path)
-}
-
-exports.getPages = function() {
-  const pagesDir = path.resolve(__dirname, '../src/entries')
-  const pages = glob.sync(`${pagesDir}/**/index.js`)
-  return pages.map(p => [
+const allPages = (() => {
+  const pagesDir = resolve('src/entries')
+  const entries = glob.sync(`${pagesDir}/**/index.js`)
+  return entries.map(p => [
     path
       .relative(pagesDir, p)
       .split(path.sep)
@@ -30,17 +24,21 @@ exports.getPages = function() {
       .join('/'),
     p
   ])
+})()
+
+function assetsPath(_path) {
+  return path.posix.join(config.assetsSubDirectory, _path)
 }
 
-exports.getEntries = function() {
-  return exports.getPages().reduce((entries, next) => {
+function getEntries() {
+  return allPages.reduce((entries, next) => {
     entries[next[0]] = next[1]
     return entries
   }, {})
 }
 
-exports.getHtmlPlugins = function() {
-  return exports.getPages().map(p => {
+function getHtmlPlugins() {
+  return allPages.map(p => {
     const chunks = isProd ? ['manifest', 'polyfill', 'styles', p[0]] : [p[0]]
     const tpName = p[1].replace('.js', '.html')
     const template = fs.existsSync(tpName) ? tpName : defaultTemplatePath
@@ -50,7 +48,22 @@ exports.getHtmlPlugins = function() {
       filename: `${p[0]}.html`,
       chunks,
       inject: true,
-      chunksSortMode: 'manual'
+      chunksSortMode: 'manual',
+      minify: isProd
+        ? {
+            removeComments: true,
+            collapseWhitespace: true,
+            removeAttributeQuotes: true
+          }
+        : false
     })
   })
+}
+
+module.exports = {
+  allPages,
+  resolve,
+  assetsPath,
+  getEntries,
+  getHtmlPlugins
 }

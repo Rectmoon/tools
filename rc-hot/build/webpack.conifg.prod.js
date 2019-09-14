@@ -7,7 +7,9 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin')
+
 const CompressionPlugin = require('compression-webpack-plugin')
 const zopfli = require('@gfx/zopfli')
 
@@ -41,8 +43,16 @@ module.exports = webpackMerge(baseConfig, {
 
     new DllReferencePlugin({
       context: __dirname,
-      manifest: require('../static/dll/rc_manifest.json')
+      manifest: require('../static/js/dll/rc_manifest.json')
     }),
+
+    new CopyWebpackPlugin(
+      Object.keys(config.externals).map(vendor => ({
+        from: `node_modules/${vendor}/dist`,
+        to: `${config.assetsSubDirectory}/js/vendors`,
+        ignore: ['!*.min.js']
+      }))
+    ),
 
     new MiniCssExtractPlugin({
       filename: assetsPath('css/[name].[contenthash:6].css'),
@@ -71,33 +81,49 @@ module.exports = webpackMerge(baseConfig, {
         }
       }),
 
-    new AddAssetHtmlPlugin([
-      {
-        filepath: resolve('static/dll/*.dll.js'),
-        outputPath: assetsPath(`js`),
-        publicPath: `${config.publicPath}${assetsPath('js')}`
-      }
+    /**
+     *  第一种方式：
+     * 使用dll预打包
+     * { filepath: resolve('static/dll/*_dll.js') }
+     *
+     *  第二种方式
+     *  配置 externals, 并在html直接引入 polyfill.min.js, react.min.js, react-dom.min.js
+     *  externals: {
+     *    react: 'React',
+     *   'react-dom': 'ReactDOM'
+     *  }
+     *
+     *  第三种方式
+     *  直接将入口和 react、react-dom混在一起, 并在入口按需引入相关依赖
+     */
+
+    new HtmlWebpackTagsPlugin({
+      tags: [{ path: `${config.assetsSubDirectory}/js/dll`, glob: '*.dll.js', globPath: 'static/js/dll/' }],
+      append: false
+    }),
+
+    new HtmlWebpackTagsPlugin({
       /**
-       *  第一种方式：
-       * 使用dll预打包
-       * { filepath: resolve('static/dll/*_dll.js') }
-       *
-       *  第二种方式
-       *  配置 externals, 并在html ！！直接！！ 引入 polyfill.min.js
-       *  externals: {
-       *    react: 'React',
-       *   'react-dom': 'ReactDOM'
-       *  }
-       *  { filepath: require.resolve('../node_modules/@babel/polyfill/dist/polyfill.min.js') },
-       *  { filepath: require.resolve('react/umd/react.production.min.js') },
-       *  { filepath: require.resolve('react-dom/umd/react-dom.production.min') }
-       *
-       *  第三种方式
-       *  直接将入口和 react、react-dom混在一起, 并在入口按需引入相关依赖
+       *  tags: ['https://cdn.bootcss.com/axios/0.19.0/axios.min.js'],
+       *  publicPath: false
+       *  append: false
        */
-    ]),
+      scripts: Object.entries(config.externals).map(([packageName, variableName]) => ({
+        path: `${config.assetsSubDirectory}/js/vendors/${packageName}.min.js`,
+        external: {
+          packageName,
+          variableName
+        },
+        attributes: {
+          type: 'text/javascript'
+        }
+      }))
+    }),
+
     config.report && new BundleAnalyzerPlugin()
   ].filter(Boolean),
+
+  externals: config.externals,
 
   optimization: {
     moduleIds: 'hashed',

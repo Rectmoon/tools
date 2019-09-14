@@ -6,11 +6,15 @@ const compression = require('compression')
 
 const port = process.env.port || 3000
 
-const config = require('./build/config')
+const { gzipOn, publicPath, outputDir } = require('./build/config')
 
-config.gzipOn && app.use(compression())
+gzipOn && app.use(compression())
 
-app.use(`${config.publicPath.slice(0, -1)}`, express.static(path.join(__dirname, config.outputDir), { maxAge: '10m' }))
+app.use(`${publicPath.slice(0, -1)}`, express.static(path.join(__dirname, outputDir), { maxAge: '10m' }))
+
+app.get(`${publicPath}:path`, (req, res) => {
+  res.sendFile(__dirname + `/${outputDir}/${req.params.path}.html`, { maxAge: '0' })
+})
 
 app.listen(port, () => {
   console.log(`Application is listening at http://localhost:${port}`)

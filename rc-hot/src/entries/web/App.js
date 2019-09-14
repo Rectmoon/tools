@@ -6,6 +6,8 @@ import Counter from './Counter'
 import Button from './Button'
 import styles from './index.styl'
 
+import { getProfile } from '@/api/profile'
+
 console.log(process.env)
 
 const sleep = t => new Promise(resolve => setTimeout(resolve, t * 1000))
@@ -19,14 +21,17 @@ class App extends Component {
   }
 
   handleClick = () => {
-    console.log(t)
-    console.log(6666789)
+    console.log(66667898)
     this.setState({
       count: this.state.count + 1
     })
   }
 
   async componentDidMount() {
+    getProfile().then(res => {
+      console.log(res)
+    })
+
     await sleep(3)
     console.log('What happened ?')
   }
@@ -40,7 +45,7 @@ class App extends Component {
           <Counter />
         </h1>
         <h1>{this.state.count}</h1>
-        <Button onClick={this.handleClick}>123456789</Button>
+        <Button onClick={this.handleClick}>我是一个按钮</Button>
 
         <div className="flex">我是widget中的样式</div>
 

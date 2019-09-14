@@ -9,7 +9,7 @@ module.exports = {
   },
   output: {
     filename: '[name]_[hash:6].dll.js',
-    path: resolve('static/dll'),
+    path: resolve('static/js/dll'),
     library: '_dll_[name]'
   },
   plugins: [
@@ -20,7 +20,7 @@ module.exports = {
     new DllPlugin({
       name: '_dll_[name]',
       context: __dirname,
-      path: resolve('static/dll/[name]_manifest.json')
+      path: resolve('static/js/dll/[name]_manifest.json')
     })
   ]
 }
