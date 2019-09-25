@@ -4,7 +4,6 @@
   box-sizing border-box
 
 body
-  background-color orange
   height 100vh
   display flex
   justify-content center
@@ -33,3 +32,60 @@ body
   line-height 1.2
   white-space pre-wrap
   overflow auto
+
+.show-box
+  transform rotateY(0deg)
+
+.title
+  height 60px
+  color #D3D7F7
+  font-size 16px
+  margin-bottom 0
+
+.bottom
+  display flex
+  height 42px
+  justify-content space-between
+  align-items center
+
+button
+  padding 10px 30px
+  border 2px solid #4FA1D9
+  border-radius 50px
+  background transparent
+  font-size 11px
+  color #4FA1D9
+  transition all 0.2s
+  cursor pointer
+  outline none
+
+.hidden-box
+  transform rotateY(180deg)
+
+.dialog
+  position fixed
+  left 0
+  top 0
+  right 0
+  bottom 0
+  background rgba(0, 0, 0, 0.9)
+  display flex
+  justify-content center
+  align-items center
+
+  .dialog-container
+    position relative
+    width 500px
+    height 500px
+    background #fff
+    border-radius 10px
+    padding 10px
+
+    h2
+      color #f00
+
+    .close
+      position absolute
+      right 10px
+      top 10px
+      cursor pointer

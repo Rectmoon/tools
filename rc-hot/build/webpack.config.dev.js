@@ -1,9 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
 const webpackMerge = require('webpack-merge')
-const baseConfig = require('./webpack.conifg.base')
+const baseConfig = require('./webpack.config.base')
 const { publicPath } = require('./config')
-const { allPages } = require('./utils')
 
 module.exports = webpackMerge(baseConfig, {
   mode: 'development',
@@ -16,7 +15,7 @@ module.exports = webpackMerge(baseConfig, {
         use: ['react-hot-loader/webpack', 'babel-loader']
       },
       {
-        include: /node_modules/,
+        include: /node_modules\/react-dom/,
         test: /\.jsx?$/,
         use: {
           loader: 'react-hot-loader/webpack'
@@ -64,9 +63,9 @@ module.exports = webpackMerge(baseConfig, {
        * /rainbow/web => /rainbow/web.html
        * /rainbow/admin => /rainbow/admin.html
        */
-      rewrites: allPages
-        .map(([page]) => {
-          const route = `${publicPath}${page}`
+      rewrites: Object.keys(baseConfig.entry)
+        .map(entry => {
+          const route = `${publicPath}${entry}`
           return {
             from: new RegExp(`^${route}$`),
             to: `${route}.html`

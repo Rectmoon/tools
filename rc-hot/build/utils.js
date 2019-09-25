@@ -13,33 +13,36 @@ function resolve(dir) {
 
 const defaultTemplatePath = resolve('index.html')
 
-const allPages = (() => {
-  const pagesDir = resolve('src/entries')
-  const entries = glob.sync(`${pagesDir}/**/index.js`)
+const getAllPages = (entries, entryDirPath) => {
   return entries.map(p => [
     path
-      .relative(pagesDir, p)
+      .relative(entryDirPath, p)
       .split(path.sep)
       .slice(0, -1)
       .join('/'),
     p
   ])
-})()
+}
 
 function assetsPath(_path) {
   return path.posix.join(config.assetsSubDirectory, _path)
 }
 
-function getEntries() {
-  return allPages.reduce((entries, next) => {
+function getEntries(entryDir = 'src/entries') {
+  const entryDirPath = resolve(entryDir)
+  const entries = glob.sync(`${entryDirPath}/**/index.js`)
+  return getAllPages(entries, entryDirPath).reduce((entries, next) => {
     entries[next[0]] = next[1]
     return entries
   }, {})
 }
 
-function getHtmlPlugins() {
-  return allPages.map(p => {
-    const chunks = isProd ? ['manifest', 'polyfill', 'styles', p[0]] : [p[0]]
+function getHtmlPlugins(entryDir = 'src/entries') {
+  const entryDirPath = resolve(entryDir)
+  const entries = glob.sync(`${entryDirPath}/**/index.js`)
+
+  return getAllPages(entries, entryDirPath).map(p => {
+    const chunks = ['manifest', 'polyfill', 'styles', p[0]]
     const tpName = p[1].replace('.js', '.html')
     const template = fs.existsSync(tpName) ? tpName : defaultTemplatePath
 
@@ -60,8 +63,37 @@ function getHtmlPlugins() {
   })
 }
 
+// function getEntries() {
+//   return allPages.reduce((entries, next) => {
+//     entries[next[0]] = next[1]
+//     return entries
+//   }, {})
+// }
+
+// function getHtmlPlugins() {
+//   return allPages.map(p => {
+//     const chunks = isProd ? ['manifest', 'polyfill', 'styles', p[0]] : [p[0]]
+//     const tpName = p[1].replace('.js', '.html')
+//     const template = fs.existsSync(tpName) ? tpName : defaultTemplatePath
+
+//     return new HtmlWebpackPlugin({
+//       template: template,
+//       filename: `${p[0]}.html`,
+//       chunks,
+//       inject: true,
+//       chunksSortMode: 'manual',
+//       minify: isProd
+//         ? {
+//             removeComments: true,
+//             collapseWhitespace: true,
+//             removeAttributeQuotes: true
+//           }
+//         : false
+//     })
+//   })
+// }
+
 module.exports = {
-  allPages,
   resolve,
   assetsPath,
   getEntries,

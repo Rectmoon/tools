@@ -6,14 +6,16 @@ export default class App extends React.Component {
     this.state = {
       a: 1
     }
+    this.handleClick = this.handleClick.bind(this)
   }
 
   componentDidMount() {
-    console.log(23456)
+    alert()
+    console.log(234568)
   }
 
-  handleClick = () => {
-    console.log(562127)
+  handleClick() {
+    console.log(666777888)
     console.log(this.state.a)
     this.setState({
       a: 666
@@ -23,9 +25,9 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>hello12342678</h1>
+        <h1>hello1234568</h1>
 
-        <button onClick={this.handleClick}>我是一个按钮嘿嘿嘿333</button>
+        <button onClick={this.handleClick}>我是一个按钮嘿嘿嘿</button>
       </div>
     )
   }

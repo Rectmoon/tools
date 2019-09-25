@@ -14,7 +14,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const zopfli = require('@gfx/zopfli')
 
 const { name, author, description, version } = require('../package.json')
-const baseConfig = require('./webpack.conifg.base')
+const baseConfig = require('./webpack.config.base')
 const config = require('./config')
 
 const { resolve, assetsPath } = require('./utils')

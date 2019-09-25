@@ -3,7 +3,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const { getLibEntries } = require('./utils')
 const { resolve } = require('./alias')
 const { useSourceMap } = require('../ying.config')
-console.log(useSourceMap)
 
 module.exports = {
   entry: getLibEntries(),
