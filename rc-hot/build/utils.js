@@ -63,36 +63,6 @@ function getHtmlPlugins(entryDir = 'src/entries') {
   })
 }
 
-// function getEntries() {
-//   return allPages.reduce((entries, next) => {
-//     entries[next[0]] = next[1]
-//     return entries
-//   }, {})
-// }
-
-// function getHtmlPlugins() {
-//   return allPages.map(p => {
-//     const chunks = isProd ? ['manifest', 'polyfill', 'styles', p[0]] : [p[0]]
-//     const tpName = p[1].replace('.js', '.html')
-//     const template = fs.existsSync(tpName) ? tpName : defaultTemplatePath
-
-//     return new HtmlWebpackPlugin({
-//       template: template,
-//       filename: `${p[0]}.html`,
-//       chunks,
-//       inject: true,
-//       chunksSortMode: 'manual',
-//       minify: isProd
-//         ? {
-//             removeComments: true,
-//             collapseWhitespace: true,
-//             removeAttributeQuotes: true
-//           }
-//         : false
-//     })
-//   })
-// }
-
 module.exports = {
   resolve,
   assetsPath,
