@@ -55,6 +55,15 @@ module.exports = webpackMerge(baseConfig, {
        * proxy setting
        * 详细配置：https://github.com/chimurai/http-proxy-middleware
        */
+      '/test/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        pathRewrite: { '^/test': '' },
+        bypass(req) {
+          req.headers.Cookies = 'x=1'
+          req.headers.aaa = '666'
+        }
+      }
     },
 
     historyApiFallback: {
