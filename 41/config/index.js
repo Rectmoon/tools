@@ -8,6 +8,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
+    pageAsDir: false,
     productionSourceMap: false,
     productionGzip: false,
     productionGzipExtensions: ['js', 'css'],

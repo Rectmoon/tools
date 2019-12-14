@@ -6,10 +6,14 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.config')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const env = require('../config/prod.env')
+
+const commonOptions = {
+  chunks: 'all',
+  reuseExistingChunk: true
+}
+
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   module: {
@@ -31,10 +35,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     new webpack.HashedModuleIdsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new CleanWebpackPlugin(['dist'], {
-      verbose: true,
-      dry: false
-    }),
     ...utils.getHtmlPlugins(),
     new MiniCssExtractPlugin({
       filename: utils.assetsPath('css/[name].[chunkhash:6].css', true),
@@ -82,15 +82,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       }
     },
     minimizer: [
-      new UglifyJsPlugin({
-        sourceMap: useSourceMap,
-        uglifyOptions: {
-          compress: {
-            drop_debugger: false,
-            drop_console: false
-          }
-        }
-      }),
       new OptimizeCSSAssetsPlugin({
         cssProcessorOptions: {
           safe: true

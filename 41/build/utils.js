@@ -106,12 +106,11 @@ exports.getEntries = function() {
 
 exports.getHtmlPlugins = function() {
   return exports.getPages().map(p => {
-    const chunks = isProd ? [
-    'manifest', p[0]] : [p[0]]
+    const chunks = isProd ? ['manifest', p[0]] : [p[0]]
     return new HtmlWebpackPlugin({
       template: p[1],
       filename: isProd
-        ? path.resolve(__dirname, `../dist/${p[0]}.html`)
+        ? path.resolve(__dirname, `../dist/${config.build.pageAsDir ? `${p[0]}/index.` : p[0]}.html`)
         : `${p[0]}.html`,
       chunks,
       inject: true,
