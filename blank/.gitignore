@@ -1,4 +1,6 @@
 dist/
 rev/
+tmp/
 .vscode/
 package-lock.json
+node_modules

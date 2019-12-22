@@ -7,7 +7,6 @@
     <title>Document</title>
 
     <link rel="stylesheet" href="/static/stylesheets/main.css" />
-    <script src="/static/js/jquery.js"></script>
 
     <style>
       #box {
@@ -133,6 +132,8 @@
       }
     </style>
 
+    @@include('include/header.html')
+
     <script>
       /*
        * 获取元素移动的方向
@@ -184,16 +185,13 @@
             var direction = directionMap[getDirection($this, e)]
             $this
               .find('.info')
-              .stop()
               .removeClass(
                 Object.values(directionMap)
                   .map(v => 'from-' + v)
                   .join(' ')
               )
               .addClass(`to-${direction}`)
-              .fadeOut(function() {
-                $(this).removeClass(`to-${direction}`)
-              })
+              .fadeOut()
           }
         })
       })
@@ -204,5 +202,18 @@
     <div id="box">
       <div class="info" style="display: none;">666</div>
     </div>
+
+    <div id="app">
+      {{a}}
+    </div>
+
+    <script>
+      var vm = new Vue({
+        el: '#app',
+        data: {
+          a: 1
+        }
+      })
+    </script>
   </body>
 </html>

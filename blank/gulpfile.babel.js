@@ -17,7 +17,6 @@ import browserify from 'browserify'
 
 import es from 'event-stream'
 import glob from 'glob'
-import gulpBabel from 'gulp-babel'
 import uglify from 'gulp-uglify'
 
 import gzip from 'gulp-gzip'
@@ -43,7 +42,7 @@ function getEntries() {
 
 const paths = {
   views: {
-    src: 'src/views/**/*.html',
+    src: ['src/views/**/*.html', '!src/views/include/**/*.html'],
     dest: 'tmp'
   },
   css: {
@@ -63,7 +62,7 @@ const paths = {
     dest: 'tmp/static'
   },
   tmpStatic: {
-    src: 'tmp/static/**/*',
+    src: ['tmp/static/**/*'],
     dest: 'dist/static'
   },
   server: {
@@ -73,28 +72,7 @@ const paths = {
 
 const isDev = process.env.NODE_ENV === 'dev'
 
-/** dev */
-export const serve = () => {
-  gulpConnect.server({
-    root: paths.server.root,
-    livereload: true,
-    port: 9909,
-    middleware: function() {
-      return [
-        proxy('/api', {
-          target: 'http://localhost:8080',
-          changeOrigin: true
-        }),
-        proxy('/kkk', {
-          target: 'http://IP:Port',
-          changeOrigin: true
-        })
-      ]
-    }
-  })
-}
-
-export const watch = () => {
+function watch() {
   gulp.watch(paths.css.src, css)
   gulp.watch(paths.less.src, less)
   gulp.watch(paths.views.src, html)
@@ -126,7 +104,6 @@ export const watch = () => {
         .on('error', () => console.log('Browserify Error')),
       vlss(`${b.vlssName}.js`),
       buffer(),
-      // rename({ extname: '.js' }),
       gulp.dest(paths.bundle.dest),
       gulpConnect.reload()
     ])
@@ -137,6 +114,28 @@ export const watch = () => {
     watcher.on('update', e => devBundle(browserifyMap[key], e))
     devBundle(browserifyMap[key])
   })
+}
+
+/** dev */
+export const serve = () => {
+  gulpConnect.server({
+    root: paths.server.root,
+    livereload: true,
+    port: 9909,
+    middleware: function() {
+      return [
+        proxy('/api', {
+          target: 'http://localhost:8080',
+          changeOrigin: true
+        }),
+        proxy('/kkk', {
+          target: 'http://IP:Port',
+          changeOrigin: true
+        })
+      ]
+    }
+  })
+  watch()
 }
 
 /** build */
@@ -187,8 +186,11 @@ export const html = () =>
     [
       gulp.src(paths.views.src),
       gulpFileInclude({
-        prefix: '##',
-        basepath: '@file'
+        prefix: '@@',
+        basepath: '@file',
+        context: {
+          env: process.env.NODE_ENV
+        }
       }),
       gulp.dest(paths.views.dest),
       isDev && gulpConnect.reload()
@@ -241,21 +243,18 @@ export const copySrcStatic = () =>
 export const copyTmpStatic = () =>
   pipeline.apply(null, [gulp.src(paths.tmpStatic.src), gulp.dest(paths.tmpStatic.dest)])
 
-export const copy = () => pipeline.apply(null, [gulp.src('tmp/**/*'), gulp.dest('dist')])
+export const copy = () => pipeline.apply(null, [gulp.src(['tmp/**/*']), gulp.dest('dist')])
 
 export const gz = () =>
   gulp
-    .src(`${paths.static.dest}/**/*`)
-    .pipe(gulp.dest(`${paths.static.dest}`))
+    .src(paths.tmpStatic.src)
     .pipe(gzip())
-    .pipe(gulp.dest(`${paths.static.dest}`))
-
-export const sources = gulp.series(html, styles, copy)
+    .pipe(gulp.dest(`${paths.tmpStatic.dest}`))
 
 const run = gulp.series.apply(
   null,
   [html, copySrcStatic, jsmin, styles]
-    .concat(isDev ? [serve, watch()] : [copy, revHtml, process.env.npm_config_gz && gz, copyTmpStatic])
+    .concat(isDev ? [serve] : [copy, revHtml, copyTmpStatic, process.env.npm_config_gz && gz])
     .filter(Boolean)
 )
 
