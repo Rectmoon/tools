@@ -1,0 +1,8 @@
+dist
+node_modules
+.cache
+
+.env.*.local
+
+package-lock.json
+yarn.lock

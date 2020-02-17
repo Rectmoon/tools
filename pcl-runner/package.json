@@ -1,0 +1,36 @@
+{
+  "name": "1.hello",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf .cache && rimraf dist",
+    "dev": "npm run clean && parcel src/**/*/index.{html,pug} -p 7726",
+    "build": "npm run clean && parcel build src/**/*/index.{html,pug} --global lzx",
+    "build:nosrc": "npm run clean && parcel build src/**/*/index.{html,pug} --global lzx --no-source-maps"
+  },
+  "author": "Rectmoon",
+  "license": "ISC",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.1.1",
+    "autoprefixer": "^9.7.4",
+    "cssnano": "^4.1.10",
+    "parcel-bundler": "^1.12.4",
+    "postcss-modules": "^1.5.0",
+    "pug": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "sass": "^1.25.0",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "jquery": "^3.4.1",
+    "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4"
+  }
+}
